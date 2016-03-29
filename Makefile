@@ -19,6 +19,8 @@ SOURCES = $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/*/*.c)
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
 BINARY  = $(BINDIR)/$(TARGET)
 
+TESTFILE = tmp/testfile.u
+
 $(BINARY): $(OBJECTS)
 	test -d $(@D) || mkdir $(@D)
 	$(LINK) $? -o $@ $(LFLAGS) $(LIBRAR)
@@ -37,4 +39,4 @@ uninstall:
 	rm $(INSDIR)/$(TARGET)
 
 test:
-	$(BINARY)
+	$(BINARY) $(TESTFILE)
