@@ -1,5 +1,6 @@
+#include "UpperCase/program_io.h"
+
 #include <stdio.h>
-#include "UpperCase/main.h"
 
 /**
  * The main method of the program
@@ -19,31 +20,28 @@ int main(int argc, char const *argv[])
 	}
 
 	// Open the file (return error if failed)
-	program = fopen(argv[1], "r");
-	if (program == NULL)
+	if (!open_program(argv[1]))
 	{
 		printf("ERROR! Something went wrong when reading the file\n");
 		return 1;
 	}
 
 	// Read for each character in the file
-	char c;
-	while((c = fgetc(program)) != EOF)
+	while(next_character())
 	{
-		// Validate that character is an uppercase letter
-		// If not, print error message and end program with exit status 1
-		if (!(c >= 'A' && c <= 'Z'))
+		// If character is invalid, print error message and end program with exit status 1
+		if (invalid_character())
 		{
 			printf(" --> ERROR: Invalid character! Must be an uppercase letter!\n");
-			fclose(program);	
+			close_program();	
 			return 1;
 		}
 
 		// Print character
-		printf("%c\n", c);
+		printf("%c\n", current_character());
 	}
 
-	// Close file and exit the program
-	fclose(program);
+	// Close program and exit the program
+	close_program();
 	return 0;
 }
