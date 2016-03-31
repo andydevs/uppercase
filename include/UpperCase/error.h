@@ -17,44 +17,30 @@
 //-----------------------------------------------------------------------
 
 /**
- * Handles IO between the program file in UpperCase
+ * Handles errors in the program
  */
-#ifndef _UC_PROGRAM_IO_H_
-#define _UC_PROGRAM_IO_H_
+#ifndef _UC_ERROR_H_
+#define _UC_ERROR_H_
 
 /**
- * Sets the program to the given filename
+ * Defines error types
+ */
+typedef enum 
+{
+	UC_INPUT_CHAR_INVALD,
+	
+	UC_REGISTRY_MODULE_SLOT_FILLED,
+	UC_REGISTRY_MODULE_NOT_FOUND,
+} 
+uc_error_type;
+
+/**
+ * Function for throwing errors
  *
- * @param filename the name of the file
- * 
- * @return true if the program was opened successfully
- */
-int uc_open_program(const char *filename);
-
-/**
- * Returns the current character
- * 
- * @return the current character
- */
-char uc_current_character();
-
-/**
- * Returns true if the current character is not an uppercase letter
+ * @param uc_err the error being thrown
  *
- * @return true if the current character is not an uppercase letter
+ * @return NULL pointer
  */
-int uc_invalid_character();
-
-/**
- * Advances to the next character in the program file
- *
- * @return true if the next character is not the end of file
- */
-int uc_next_character();
-
-/**
- * Closes the program
- */
-void uc_close_program();
+void *uc_throw_error(uc_error_type uc_err);
 
 #endif

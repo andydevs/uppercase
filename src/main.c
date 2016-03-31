@@ -1,5 +1,24 @@
+//-----------------------------------------------------------------------
+// UpperCase a toy language made up of nothing but uppercase letters
+// Copyright (C) 2016  Anshul Kharbanda
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//-----------------------------------------------------------------------
+
 #include "UpperCase/program_io.h"
 #include "UpperCase/state_machine.h"
+#include "UpperCase/module_data.h"
 
 #include <stdio.h>
 
@@ -16,22 +35,24 @@ int main(int argc, char const *argv[])
 	// Test if filename is given (print error if not)
 	if (argc < 2)
 	{
-		printf("ERROR! Filename must be specified in arguments!\n");
+		printf("ERROR! File must be specified!\n");
 		return 1;
 	}
 
 	// Open the file (return error if failed)
-	if (!open_program(argv[1]))
+	if (!uc_open_program(argv[1]))
 	{
-		printf("ERROR! Something went wrong when reading the file\n");
+		printf("ERROR! Something went wrong when reading the file!\n");
 		return 1;
 	}
 
-	// Test state machine
+	// Register modules
+	uc_register_module('D', &uc_data_state);
+
+	// Run state machine and save end status
 	int status = uc_run();
 
-	// Close program and exit the program
-	close_program();
-
+	// Exit the program with status
+	uc_close_program();
 	return status;
 }

@@ -1,5 +1,6 @@
 #include "UpperCase/state_machine.h"
 #include "UpperCase/program_io.h"
+#include "UpperCase/error.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,13 +15,17 @@
  */
 int uc_run(void)
 {
-	error = OKAY;
-	void *(*current)(void) = &uc_main_state;
-	while (current != NULL)
+	uc_state uc_current_state = &uc_main_state;
+	while (uc_current_state != NULL && uc_next_character())
 	{
-		current = current();
+		if (uc_invalid_character())
+		{
+			uc_throw_error(UC_INPUT_CHAR_INVALD);
+			return 1;
+		}
+		uc_current_state = uc_current_state();
 	}
-	return error != OKAY;
+	return 0;
 }
 
 /**
@@ -29,43 +34,54 @@ int uc_run(void)
  */
 void *uc_main_state(void)
 {
-	printf("%c --> main\n", current_character());
-	
-	if (!next_character())
-	{
-		return NULL;
-	}
-
-	if (invalid_character())
-	{
-		error = INVALID_CHAR;
-		return (void*)&uc_error_state;
-	}
-
-	return (void*)&uc_main_state;
+	return (void*)uc_registry_get_module();
 }
 
 
-
-//---------------------------ERROR HANDLING---------------------------
+//---------------------------REGISTRY SYSTEM--------------------------
 
 /**
- * Handles errors.
+ * The registry used by the main state
  */
-void *uc_error_state(void)
+static uc_state uc_main_registry[26];
+
+/**
+ * Registers the given state function (representing a module) to the registry used by the main state
+ * 
+ * @param name the letter name to be used to call the function
+ * @param function the function being set to the name
+ *
+ * @return status code indicating successful registration of module to letter
+ */
+int uc_register_module(char name, uc_state function)
 {
-	printf("ERROR: ");
-	switch(error)
+	if (!(name >= 'A' && name <= 'Z'))
 	{
-		case OKAY:
-			printf("Unindicated.\n");
-			break;
-		case INVALID_CHAR:
-			printf("%c is invalid! must be an uppercase letter!\n", current_character());
-			break;
-		default:
-			printf("Undefined error %i\n", error);
-			break;
+		uc_throw_error(UC_INPUT_CHAR_INVALD);
+		return 1;
 	}
-	return NULL;
+
+	if (uc_main_registry[name - 'A'] != NULL)
+	{
+		uc_throw_error(UC_REGISTRY_MODULE_SLOT_FILLED);
+		return 1;
+	}
+
+	uc_main_registry[name - 'A'] = function;
+	return 0;
+}
+
+/**
+ * Returns the module represented by the current character
+ *
+ * @return the module represented by the current character
+ */
+uc_state uc_registry_get_module()
+{
+	if (uc_main_registry[uc_current_character() - 'A'] == NULL)
+	{
+		return uc_throw_error(UC_REGISTRY_MODULE_NOT_FOUND);
+	}
+
+	return uc_main_registry[uc_current_character() - 'A'];
 }

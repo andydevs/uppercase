@@ -5,12 +5,12 @@
 /**
  * The program file
  */
-static FILE *program;
+static FILE *uc_program;
 
 /**
  * The current character
  */
-static char current;
+static char uc_current;
 
 /**
  * Sets the program to the given filename
@@ -19,9 +19,9 @@ static char current;
  * 
  * @return true if the program was opened successfully
  */
-int open_program(const char *filename)
+int uc_open_program(const char *filename)
 {
-	return (program = fopen(filename, "r")) != NULL;
+	return (uc_program = fopen(filename, "r")) != NULL;
 }
 
 /**
@@ -29,9 +29,9 @@ int open_program(const char *filename)
  * 
  * @return the current character
  */
-char current_character()
+char uc_current_character()
 {
-	return current;
+	return uc_current;
 }
 
 /**
@@ -39,9 +39,9 @@ char current_character()
  *
  * @return true if the current character is not an uppercase letter
  */
-int invalid_character()
+int uc_invalid_character()
 {
-	return !(current >= 'A' && current <= 'Z');
+	return !(uc_current >= 'A' && uc_current <= 'Z');
 }
 
 /**
@@ -49,15 +49,15 @@ int invalid_character()
  *
  * @return true if the next character is not the end of file
  */
-int next_character()
+int uc_next_character()
 {
-	return (current = fgetc(program)) != EOF;
+	return (uc_current = fgetc(uc_program)) != EOF;
 }
 
 /**
  * Closes the program
  */
-void close_program()
+void uc_close_program()
 {
-	fclose(program);
+	fclose(uc_program);
 }

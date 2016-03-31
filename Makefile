@@ -1,4 +1,4 @@
-TARGET = program
+TARGET = uppercase
 
 CC = gcc
 

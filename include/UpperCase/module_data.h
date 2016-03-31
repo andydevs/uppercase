@@ -17,44 +17,39 @@
 //-----------------------------------------------------------------------
 
 /**
- * Handles IO between the program file in UpperCase
+ * Handles reading data from the UpperCase language.
  */
-#ifndef _UC_PROGRAM_IO_H_
-#define _UC_PROGRAM_IO_H_
+#ifndef _UC_MODULE_DATA_H_
+#define _UC_MODULE_DATA_H_
 
 /**
- * Sets the program to the given filename
- *
- * @param filename the name of the file
- * 
- * @return true if the program was opened successfully
+ * The data state
  */
-int uc_open_program(const char *filename);
+void *uc_data_state(void);
 
 /**
- * Returns the current character
- * 
- * @return the current character
+ * Handles string data types
  */
-char uc_current_character();
+void *uc_string_state(void);
 
 /**
- * Returns true if the current character is not an uppercase letter
- *
- * @return true if the current character is not an uppercase letter
+ * Handles letters
  */
-int uc_invalid_character();
+void *uc_letter_state(void);
 
 /**
- * Advances to the next character in the program file
- *
- * @return true if the next character is not the end of file
+ * Handles uppercase letters
  */
-int uc_next_character();
+void *uc_uppercase_state(void);
 
 /**
- * Closes the program
+ * Handles lowercase letters
  */
-void uc_close_program();
+void *uc_lowercase_state(void);
+
+/**
+ * Handles whitespace characters
+ */
+void *uc_whitespace_state(void);
 
 #endif
