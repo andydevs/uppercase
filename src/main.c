@@ -1,4 +1,5 @@
 #include "UpperCase/program_io.h"
+#include "UpperCase/state_machine.h"
 
 #include <stdio.h>
 
@@ -26,22 +27,11 @@ int main(int argc, char const *argv[])
 		return 1;
 	}
 
-	// Read for each character in the file
-	while(next_character())
-	{
-		// If character is invalid, print error message and end program with exit status 1
-		if (invalid_character())
-		{
-			printf(" --> ERROR: Invalid character! Must be an uppercase letter!\n");
-			close_program();	
-			return 1;
-		}
-
-		// Print character
-		printf("%c\n", current_character());
-	}
+	// Test state machine
+	int status = uc_run();
 
 	// Close program and exit the program
 	close_program();
-	return 0;
+
+	return status;
 }
