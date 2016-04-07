@@ -23,6 +23,11 @@
 #define _UC_PROGRAM_IO_H_
 
 /**
+ * The number of uppercase letters in the alphabet
+ */
+#define NUMBER_OF_LETTERS 26
+
+/**
  * Sets the program to the given filename
  *
  * @param filename the name of the file

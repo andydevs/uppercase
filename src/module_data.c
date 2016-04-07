@@ -1,6 +1,26 @@
+//-----------------------------------------------------------------------
+// UpperCase a toy language made up of nothing but uppercase letters
+// Copyright (C) 2016  Anshul Kharbanda
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//-----------------------------------------------------------------------
+
 #include "UpperCase/module_data.h"
 #include "UpperCase/state_machine.h"
 #include "UpperCase/program_io.h"
+#include "UpperCase/stack.h"
+#include "UpperCase/error.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -39,8 +59,8 @@ void *uc_data_state(void)
 {
 	switch(uc_current_character())
 	{
-		case 'S':
-			return (void *)&uc_string_state;
+		case 'C':
+			return (void *)&uc_character_state;
 		default:
 			return NULL;
 	}
@@ -49,7 +69,7 @@ void *uc_data_state(void)
 /**
  * Handles string data types
  */
-void *uc_string_state(void)
+void *uc_character_state(void)
 {
 	switch(uc_current_character())
 	{
@@ -57,8 +77,6 @@ void *uc_string_state(void)
 			return (void *)&uc_letter_state;
 		case 'W':
 			return (void *)&uc_whitespace_state;
-		case 'E':
-			return (void *)&uc_main_state;
 		default:
 			return NULL;
 	}
@@ -85,8 +103,14 @@ void *uc_letter_state(void)
  */
 void *uc_uppercase_state(void)
 {
-	printf("%c", uc_uppercase());
-	return (void *)&uc_string_state;
+	if (uc_stack_push(uc_datum_from_char(uc_uppercase())))
+	{
+		return (void *)&uc_main_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_STACK_FULL);
+	}
 }
 
 /**
@@ -94,8 +118,14 @@ void *uc_uppercase_state(void)
  */
 void *uc_lowercase_state(void)
 {
-	printf("%c", uc_lowercase());
-	return (void *)&uc_string_state;
+	if (uc_stack_push(uc_datum_from_char(uc_lowercase())))
+	{
+		return (void *)&uc_main_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_STACK_FULL);
+	}
 }
 
 /**
@@ -103,8 +133,14 @@ void *uc_lowercase_state(void)
  */
 void *uc_whitespace_state(void)
 {
-	printf("%c", uc_whitespace());
-	return (void *)&uc_string_state;
+	if (uc_stack_push(uc_datum_from_char(uc_whitespace())))
+	{
+		return (void *)&uc_main_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_STACK_FULL);
+	}
 }
 
 
@@ -135,7 +171,7 @@ static char uc_lowercase(void)
  * Parses a whitespace character from the current character
  *
  * @returns whitespace character from the current character
- */
+ */
 static char uc_whitespace(void)
 {
 	switch(uc_current_character())

@@ -17,39 +17,57 @@
 //-----------------------------------------------------------------------
 
 /**
- * Handles reading data from the UpperCase language.
+ * Handles the stack
  */
-#ifndef _UC_MODULE_DATA_H_
-#define _UC_MODULE_DATA_H_
+#ifndef _UC_STACK_H_
+#define _UC_STACK_H_
 
 /**
- * The data state
+ * Uses the uc_datum
  */
-void *uc_data_state(void);
+#include "UpperCase/datum.h"
 
 /**
- * Handles character data types
+ * The maximum number of values that can be added in the stack
  */
-void *uc_character_state(void);
+#define UC_STACK_LENGTH 1024
+
+//-------------------------STACK-------------------------
 
 /**
- * Handles letters
+ * Initializes the stack
  */
-void *uc_letter_state(void);
+void uc_stack_init(void);
 
 /**
- * Handles uppercase letters
+ * Adds a uc_datum to the stack
+ *
+ * @param d the data to add to the stack
+ *
+ * @return true if data was successfully added
  */
-void *uc_uppercase_state(void);
+int uc_stack_push(uc_datum *d);
 
 /**
- * Handles lowercase letters
+ * Removes the last uc_datum added to the stack and returns it
+ *
+ * @return the last uc_datum added to the stack
  */
-void *uc_lowercase_state(void);
+uc_datum *uc_stack_pop(void);
 
 /**
- * Handles whitespace characters
+ * Prints the entire stack
  */
-void *uc_whitespace_state(void);
+void uc_stack_print(void);
+
+/**
+ * Prints a detailed description of the data in the stack
+ */
+void uc_stack_inspect(void);
+
+/**
+ * Clears all of the data from the stack
+ */
+void uc_stack_clear(void);
 
 #endif

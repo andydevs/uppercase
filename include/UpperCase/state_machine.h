@@ -25,19 +25,20 @@
 //----------------------------THE FOUNDATION-----------------------------
 
 /**
- * Defines the state function template
+ * The uc_state type is a function pointer which returns a void pointer
  */
 typedef void *(*uc_state)(void);
 
 /**
  * Runs the UpperCase state machine.
  *
- * @return true if the state machine ran successfully
+ * @return true if the state machine ran unsuccessfully
  */
 int uc_run(void);
 
 /**
- * The main state of the program
+ * state main
+ * 
  * This is where the state machine starts
  */
 void *uc_main_state(void);

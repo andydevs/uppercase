@@ -31,6 +31,8 @@ typedef enum
 	
 	UC_REGISTRY_MODULE_SLOT_FILLED,
 	UC_REGISTRY_MODULE_NOT_FOUND,
+
+	UC_STACK_FULL
 } 
 uc_error_type;
 

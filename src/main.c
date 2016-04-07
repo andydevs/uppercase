@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
-
 #include "UpperCase/program_io.h"
 #include "UpperCase/state_machine.h"
 #include "UpperCase/module_data.h"
