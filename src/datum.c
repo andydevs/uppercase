@@ -131,3 +131,13 @@ void uc_datum_inspect(uc_datum *d)
 			return;
 	}
 }
+
+/**
+ * Destroys the given datum
+ *
+ * @param d the datum to destroy
+ */
+void uc_datum_destroy(uc_datum *d)
+{
+	free(d);
+}

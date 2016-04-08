@@ -26,16 +26,20 @@
  * Function for throwing errors
  *
  * @param uc_err the error being thrown
+ * @param state_description the description of the current state
  *
  * @return NULL pointer
  */
-void *uc_throw_error(uc_error_type uc_err)
+void *uc_throw_error(uc_error_type uc_err, const char* state_description)
 {
-	printf("ERROR: ");
+	printf("ERROR in %s: ", state_description);
 	switch(uc_err)
 	{
 		case UC_INPUT_CHAR_INVALD:
 			printf("'%c' is invalid! Must be an uppercase letter!\n", uc_current_character());
+			return NULL;
+		case UC_CHAR_NOT_FOUND:
+			printf("'%c' character not found!\n", uc_current_character());
 			return NULL;
 		case UC_REGISTRY_MODULE_SLOT_FILLED:
 			printf("'%c' is already registered to another function!\n", uc_current_character());

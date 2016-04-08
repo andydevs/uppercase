@@ -17,44 +17,16 @@
 //-----------------------------------------------------------------------
 
 /**
- * Handles reading data from the UpperCase language.
+ * Handles system states
  */
-#ifndef _UC_MODULE_DATA_H_
-#define _UC_MODULE_DATA_H_
+#ifndef _UC_MODULE_SYSTEM_H_
+#define _UC_MODULE_SYSTEM_H_
 
 /**
- * The data state
+ * state system
+ *
+ * Handles system commands like print.
  */
-void *uc_data_state(void);
-
-/**
- * Handles character data types
- */
-void *uc_character_state(void);
-
-/**
- * Handles letters
- */
-void *uc_letter_state(void);
-
-/**
- * Handles uppercase letters
- */
-void *uc_uppercase_state(void);
-
-/**
- * Handles lowercase letters
- */
-void *uc_lowercase_state(void);
-
-/**
- * Handles whitespace characters
- */
-void *uc_whitespace_state(void);
-
-/**
- * Handles punctuation
- */
-void *uc_punctuation_state(void);
+void *uc_system_state(void);
 
 #endif

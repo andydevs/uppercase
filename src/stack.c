@@ -64,8 +64,8 @@ uc_datum *uc_stack_pop(void)
 	// Else return NULL
 	if (uc_stack_cursor > 0)
 	{
-		uc_datum *d = uc_stack[uc_stack_cursor];
-		uc_stack[uc_stack_cursor] = NULL;
+		uc_datum *d = uc_stack[uc_stack_cursor - 1];
+		uc_stack[uc_stack_cursor - 1] = NULL;
 		uc_stack_cursor--;
 		return d;
 	}

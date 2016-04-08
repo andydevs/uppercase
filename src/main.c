@@ -18,6 +18,7 @@
 #include "UpperCase/program_io.h"
 #include "UpperCase/state_machine.h"
 #include "UpperCase/module_data.h"
+#include "UpperCase/module_system.h"
 
 #include <stdio.h>
 
@@ -47,6 +48,7 @@ int main(int argc, char const *argv[])
 
 	// Register modules
 	uc_register_module('D', &uc_data_state);
+	uc_register_module('S', &uc_system_state);
 
 	// Run state machine and save end status
 	int status = uc_run();

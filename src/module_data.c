@@ -22,9 +22,6 @@
 #include "UpperCase/stack.h"
 #include "UpperCase/error.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-
 //----------------------------HELPER HEADERS-----------------------------
 
 /**
@@ -48,6 +45,13 @@ static char uc_lowercase(void);
  */
 static char uc_whitespace(void);
 
+/**
+ * Parses a punctuation character from the current character
+ *
+ * @returns punctuation character from the current character
+ */
+static char uc_punctuation(void);
+
 
 
 //----------------------------STATE FUNCTIONS----------------------------
@@ -62,7 +66,7 @@ void *uc_data_state(void)
 		case 'C':
 			return (void *)&uc_character_state;
 		default:
-			return NULL;
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data");
 	}
 }
 
@@ -77,8 +81,10 @@ void *uc_character_state(void)
 			return (void *)&uc_letter_state;
 		case 'W':
 			return (void *)&uc_whitespace_state;
+		case 'P':
+			return (void *)&uc_punctuation_state;
 		default:
-			return NULL;
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character");
 	}
 }
 
@@ -94,7 +100,7 @@ void *uc_letter_state(void)
 		case 'L':
 			return (void *)&uc_lowercase_state;
 		default:
-			return NULL;
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> letter");
 	}
 }
 
@@ -103,13 +109,18 @@ void *uc_letter_state(void)
  */
 void *uc_uppercase_state(void)
 {
-	if (uc_stack_push(uc_datum_from_char(uc_uppercase())))
+	char c = uc_uppercase();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> letter -> uppercase");
+	}
+	else if (uc_stack_push(uc_datum_from_char(c)))
 	{
 		return (void *)&uc_main_state;
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL);
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> uppercase");
 	}
 }
 
@@ -118,13 +129,18 @@ void *uc_uppercase_state(void)
  */
 void *uc_lowercase_state(void)
 {
-	if (uc_stack_push(uc_datum_from_char(uc_lowercase())))
+	char c = uc_lowercase();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> letter -> lowercase");
+	}
+	else if (uc_stack_push(uc_datum_from_char(c)))
 	{
 		return (void *)&uc_main_state;
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL);
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> lowercase");
 	}
 }
 
@@ -133,13 +149,38 @@ void *uc_lowercase_state(void)
  */
 void *uc_whitespace_state(void)
 {
-	if (uc_stack_push(uc_datum_from_char(uc_whitespace())))
+	char c = uc_whitespace();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> whitespace");
+	}
+	else if (uc_stack_push(uc_datum_from_char(c)))
 	{
 		return (void *)&uc_main_state;
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL);
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> whitespace");
+	}
+}
+
+/**
+ * Handles punctuation
+ */
+void *uc_punctuation_state(void)
+{
+	char c = uc_punctuation();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> punctuation");
+	}
+	else if (uc_stack_push(uc_datum_from_char(c)))
+	{
+		return (void *)&uc_main_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> punctuation");
 	}
 }
 
@@ -180,6 +221,30 @@ static char uc_whitespace(void)
 			return ' ';
 		case 'N':
 			return '\n';
+		default:
+			return 0;
+	}
+}
+
+/**
+ * Parses a punctuation character from the current character
+ *
+ * @returns punctuation character from the current character
+ */
+static char uc_punctuation(void)
+{
+	switch(uc_current_character())
+	{
+		case 'P':
+			return '.';
+		case 'E':
+			return '!';
+		case 'Q':
+			return '?';
+		case 'C':
+			return ',';
+		case 'A':
+			return '\'';
 		default:
 			return 0;
 	}

@@ -45,7 +45,7 @@ int uc_run(void)
 		// If an invalid character is spotted, return error
 		if (uc_invalid_character())
 		{
-			uc_throw_error(UC_INPUT_CHAR_INVALD);
+			uc_throw_error(UC_INPUT_CHAR_INVALD, "[RUN]");
 			return 1;
 		}
 
@@ -53,8 +53,8 @@ int uc_run(void)
 		uc_current_state = uc_current_state();
 	}
 
-	// Print the stack for debug purposes
-	uc_stack_inspect();
+	// Clear the stack
+	uc_stack_clear();
 
 	// Return program success
 	return 0;
@@ -89,13 +89,13 @@ int uc_register_module(char name, uc_state function)
 {
 	if (!(name >= 'A' && name <= 'Z'))
 	{
-		uc_throw_error(UC_INPUT_CHAR_INVALD);
+		uc_throw_error(UC_INPUT_CHAR_INVALD, "[INIT]");
 		return 1;
 	}
 
 	if (uc_main_registry[name - 'A'] != NULL)
 	{
-		uc_throw_error(UC_REGISTRY_MODULE_SLOT_FILLED);
+		uc_throw_error(UC_REGISTRY_MODULE_SLOT_FILLED, "[INIT]");
 		return 1;
 	}
 
@@ -112,7 +112,7 @@ uc_state uc_registry_get_module()
 {
 	if (uc_main_registry[uc_current_character() - 'A'] == NULL)
 	{
-		return uc_throw_error(UC_REGISTRY_MODULE_NOT_FOUND);
+		return uc_throw_error(UC_REGISTRY_MODULE_NOT_FOUND, "main");
 	}
 
 	return uc_main_registry[uc_current_character() - 'A'];

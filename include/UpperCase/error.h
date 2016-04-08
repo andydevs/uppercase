@@ -28,6 +28,7 @@
 typedef enum 
 {
 	UC_INPUT_CHAR_INVALD,
+	UC_CHAR_NOT_FOUND,
 	
 	UC_REGISTRY_MODULE_SLOT_FILLED,
 	UC_REGISTRY_MODULE_NOT_FOUND,
@@ -40,9 +41,10 @@ uc_error_type;
  * Function for throwing errors
  *
  * @param uc_err the error being thrown
+ * @param state_description the description of the current state
  *
  * @return NULL pointer
  */
-void *uc_throw_error(uc_error_type uc_err);
+void *uc_throw_error(uc_error_type uc_err, const char* state_description);
 
 #endif

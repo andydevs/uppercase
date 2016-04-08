@@ -16,45 +16,50 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-/**
- * Handles reading data from the UpperCase language.
- */
-#ifndef _UC_MODULE_DATA_H_
-#define _UC_MODULE_DATA_H_
+#include "UpperCase/module_system.h"
+#include "UpperCase/state_machine.h"
+#include "UpperCase/program_io.h"
+#include "UpperCase/stack.h"
+#include "UpperCase/error.h"
+
+//----------------------------HELPER HEADERS-----------------------------
 
 /**
- * The data state
+ * Prints the last element in the stack
  */
-void *uc_data_state(void);
+static void print(void);
+
+
+
+//----------------------------STATE FUNCTIONS----------------------------
 
 /**
- * Handles character data types
+ * state system
+ *
+ * Handles system commands like print
  */
-void *uc_character_state(void);
+void *uc_system_state(void)
+{
+	switch(uc_current_character())
+	{
+		case 'P':
+			uc_datum_print(uc_stack_pop());
+			return &uc_main_state;
+		default:
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system");
+	}
+}
+
+
+
+//----------------------------HELPER FUNCTIONS----------------------------
 
 /**
- * Handles letters
+ * Prints the last element in the stack
  */
-void *uc_letter_state(void);
-
-/**
- * Handles uppercase letters
- */
-void *uc_uppercase_state(void);
-
-/**
- * Handles lowercase letters
- */
-void *uc_lowercase_state(void);
-
-/**
- * Handles whitespace characters
- */
-void *uc_whitespace_state(void);
-
-/**
- * Handles punctuation
- */
-void *uc_punctuation_state(void);
-
-#endif
+static void print(void)
+{
+	uc_datum *d = uc_stack_pop();
+	uc_datum_print(d);
+	uc_datum_destroy(d);
+}
