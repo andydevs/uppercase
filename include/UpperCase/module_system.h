@@ -29,4 +29,11 @@
  */
 void *uc_system_state(void);
 
+/**
+ * state stack
+ *
+ * Handles stack commands like print and inspect
+ */
+void *uc_stack_state(void);
+
 #endif

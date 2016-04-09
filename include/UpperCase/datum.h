@@ -19,8 +19,6 @@
 #ifndef _UC_DATUM_H_
 #define _UC_DATUM_H_
 
-//-----------------------STACK DATA----------------------
-
 /**
  * Represents a type of data
  *
@@ -28,6 +26,7 @@
  */
 typedef enum 
 {
+	STRING,
 	BOOLEAN,
 	FLOAT,
 	CHAR,
@@ -46,6 +45,7 @@ typedef struct
 	uc_datum_type type;
 	union
 	{
+		char *string_value;
 		int boolean_value:2;
 		double float_value;
 		char char_value;
@@ -90,6 +90,15 @@ uc_datum *uc_datum_from_char(char value);
  * @return a new integer uc_datum value from the given value
  */
 uc_datum *uc_datum_from_integer(int value);
+
+/**
+ * Creates a new string uc_datum value from the given value
+ *
+ * @param value the string value of the uc_datum
+ *
+ * @return a new string uc_datum value from the given value
+ */
+ uc_datum *uc_datum_from_string(char *value);
 
 /**
  * Prints the given datum to the console

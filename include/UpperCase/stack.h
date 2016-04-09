@@ -32,6 +32,11 @@
  */
 #define UC_STACK_LENGTH 1024
 
+/**
+ * The maximum number of characters that can be added into the char stack
+ */
+#define UC_CHAR_STACK_LENGTH 512
+
 //-------------------------STACK-------------------------
 
 /**
@@ -40,7 +45,7 @@
 void uc_stack_init(void);
 
 /**
- * Adds a uc_datum to the stack
+ * Adds a datum to the stack
  *
  * @param d the data to add to the stack
  *
@@ -49,9 +54,9 @@ void uc_stack_init(void);
 int uc_stack_push(uc_datum *d);
 
 /**
- * Removes the last uc_datum added to the stack and returns it
+ * Removes the last datum added to the stack and returns it
  *
- * @return the last uc_datum added to the stack
+ * @return the last datum added to the stack
  */
 uc_datum *uc_stack_pop(void);
 
@@ -69,5 +74,30 @@ void uc_stack_inspect(void);
  * Clears all of the data from the stack
  */
 void uc_stack_clear(void);
+
+
+
+//---------------------CHAR STACK------------------------
+
+/**
+ * Adds a character to the char stack
+ *
+ * @param c the character to add to the stack
+ *
+ * @return true if the character is added successfully
+ */
+int uc_char_stack_push(char c);
+
+/**
+ * Returns a string datum from the char stack
+ *
+ * @return a string datum from the char stack
+ */
+uc_datum *uc_char_stack_get_string(void);
+
+/**
+ * Clears the char stack
+ */
+void uc_char_stack_clear(void);
 
 #endif

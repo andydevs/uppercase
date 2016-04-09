@@ -25,9 +25,9 @@
 //----------------------------HELPER HEADERS-----------------------------
 
 /**
- * Prints the last element in the stack
+ * Prints the last datum on the stack, then destroys it
  */
-static void print(void);
+static void uc_print(void);
 
 
 
@@ -43,10 +43,32 @@ void *uc_system_state(void)
 	switch(uc_current_character())
 	{
 		case 'P':
-			uc_datum_print(uc_stack_pop());
+			uc_print();
 			return &uc_main_state;
+		case 'S':
+			return &uc_stack_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system");
+	}
+}
+
+/**
+ * state stack
+ *
+ * Handles stack commands like print and inspect
+ */
+void *uc_stack_state(void)
+{
+	switch(uc_current_character())
+	{
+		case 'P':
+			uc_stack_print();
+			return &uc_main_state;
+		case 'I':
+			uc_stack_inspect();
+			return &uc_main_state;
+		default:
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system -> stack");
 	}
 }
 
@@ -55,9 +77,9 @@ void *uc_system_state(void)
 //----------------------------HELPER FUNCTIONS----------------------------
 
 /**
- * Prints the last element in the stack
+ * Prints the last datum on the stack, then destroys it
  */
-static void print(void)
+static void uc_print(void)
 {
 	uc_datum *d = uc_stack_pop();
 	uc_datum_print(d);

@@ -50,6 +50,9 @@ void *uc_throw_error(uc_error_type uc_err, const char* state_description)
 		case UC_STACK_FULL:
 			printf("Stack is full!\n");
 			return NULL;
+		case UC_CHAR_STACK_FULL:
+			printf("Char stack is full\n");
+			return NULL;
 		default:
 			printf("Undefined error %i\n", uc_err);
 			return NULL;

@@ -1,3 +1,21 @@
+//-----------------------------------------------------------------------
+// UpperCase a toy language made up of nothing but uppercase letters
+// Copyright (C) 2016  Anshul Kharbanda
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//-----------------------------------------------------------------------
+
 #include "UpperCase/datum.h"
 
 /**
@@ -5,6 +23,20 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+//----------------------------HELPER HEADERS-----------------------------
+
+/**
+ * Prints a representation of the given character for inspection
+ *
+ * @param c the character to inspect
+ */
+static void uc_inspect_character(char c);
+
+
+
+//----------------------------HELPER HEADERS-----------------------------
 
 /**
  * Creates a new boolean uc_datum value from the given value
@@ -67,6 +99,21 @@ uc_datum *uc_datum_from_integer(int value)
 }
 
 /**
+ * Creates a new string uc_datum value from the given value
+ *
+ * @param value the string value of the uc_datum
+ *
+ * @return a new string uc_datum value from the given value
+ */
+uc_datum *uc_datum_from_string(char *value)
+{	
+	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	d->type = STRING;
+	d->value.string_value = value;
+	return d;
+}
+
+/**
  * Prints the given data to the console
  *
  * @param d the data being printed
@@ -75,6 +122,9 @@ void uc_datum_print(uc_datum *d)
 {
 	switch(d->type)
 	{
+		case STRING:
+			printf("%s", d->value.string_value);
+			return;
 		case BOOLEAN:
 			printf("%c", (d->value.boolean_value > 0 ? 'T' : 'F'));
 			return;
@@ -101,28 +151,24 @@ void uc_datum_inspect(uc_datum *d)
 {
 	switch(d->type)
 	{
+		case STRING:
+			printf("string: \"");
+			for (int i = 0; i < strlen(d->value.string_value); ++i)
+			{
+				uc_inspect_character(d->value.string_value[i]);
+			}
+			printf("\"");
+			return;
 		case BOOLEAN:
 			printf("boolean: %c", (d->value.boolean_value > 0 ? 'T' : 'F'));
 			return;
 		case FLOAT:
-			printf("float %f", d->value.float_value);
+			printf("float: %f", d->value.float_value);
 			return;
 		case CHAR:
-			switch (d->value.char_value)
-			{
-				case '\n':
-					printf("char: '\\n'");
-					return;
-				case '\t':
-					printf("char: '\\t'");
-					return;
-				case '\r':
-					printf("char: '\\r'");
-					return;
-				default:
-					printf("char: '%c'", d->value.char_value);
-					return;
-			}
+			printf("char: '");
+			uc_inspect_character(d->value.char_value);
+			printf("'");
 		case INT:
 			printf("int: %d", d->value.integer_value);
 			return;
@@ -139,5 +185,37 @@ void uc_datum_inspect(uc_datum *d)
  */
 void uc_datum_destroy(uc_datum *d)
 {
+	if (d->type == STRING)
+	{
+		free(d->value.string_value);
+	}
 	free(d);
+}
+
+
+
+//---------------------------HELPER FUNCTIONS----------------------------
+
+/**
+ * Prints a representation of the given character for inspection
+ *
+ * @param c the character to inspect
+ */
+static void uc_inspect_character(char c)
+{
+	switch(c)
+	{
+		case '\n':
+			printf("\\n");
+			return;
+		case '\t':
+			printf("\\t");
+			return;
+		case '\r':
+			printf("\\r");
+			return;
+		default:
+			printf("%c", c);
+			return;
+	}
 }

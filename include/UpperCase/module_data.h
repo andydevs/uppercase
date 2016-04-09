@@ -22,39 +22,105 @@
 #ifndef _UC_MODULE_DATA_H_
 #define _UC_MODULE_DATA_H_
 
+//----------------------------DATA STATE----------------------------
+
 /**
+ * state data
+ *
  * The data state
  */
 void *uc_data_state(void);
 
+
+
+//---------------------------STRING STATE---------------------------
+
 /**
+ * state string
+ *
+ * Handles string data types
+ */
+void *uc_string_state(void);
+
+/**
+ * state string_letter
+ *
+ * Handles letters in strings
+ */
+void *uc_string_letter_state(void);
+
+/**
+ * state string_uppercase
+ *
+ * Handles uppercase letters in strings
+ */
+void *uc_string_uppercase_state(void);
+
+/**
+ * state string_lowercase
+ *
+ * Handles lowercase letters in strings
+ */
+void *uc_string_lowercase_state(void);
+
+/**
+ * state string_whitespace
+ *
+ * Handles whitespace characters in strings
+ */
+void *uc_string_whitespace_state(void);
+
+/**
+ * state string_punctuation
+ *
+ * Handles punctuation in strings
+ */
+void *uc_string_punctuation_state(void);
+
+
+
+//--------------------------CHARACTER STATE-------------------------
+
+/**
+ * state character
+ *
  * Handles character data types
  */
 void *uc_character_state(void);
 
 /**
+ * state character_letter
+ *
  * Handles letters
  */
-void *uc_letter_state(void);
+void *uc_character_letter_state(void);
 
 /**
+ * state character_uppercase
+ *
  * Handles uppercase letters
  */
-void *uc_uppercase_state(void);
+void *uc_character_uppercase_state(void);
 
 /**
+ * state character_lowercase
+ *
  * Handles lowercase letters
  */
-void *uc_lowercase_state(void);
+void *uc_character_lowercase_state(void);
 
 /**
+ * state character_whitespace
+ *
  * Handles whitespace characters
  */
-void *uc_whitespace_state(void);
+void *uc_character_whitespace_state(void);
 
 /**
+ * state character_punctuation
+ *
  * Handles punctuation
  */
-void *uc_punctuation_state(void);
+void *uc_character_punctuation_state(void);
 
 #endif

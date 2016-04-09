@@ -52,6 +52,15 @@ static char uc_whitespace(void);
  */
 static char uc_punctuation(void);
 
+/**
+ * Ends the current string
+ *
+ * @return the next state which depends on 
+ *		   if the current string was ended successfully
+ */
+static void* uc_end_string(void);
+
+
 
 
 //----------------------------STATE FUNCTIONS----------------------------
@@ -64,13 +73,152 @@ void *uc_data_state(void)
 	switch(uc_current_character())
 	{
 		case 'C':
-			return (void *)&uc_character_state;
+			return (void*)&uc_character_state;
+		case 'S':
+			uc_char_stack_clear();
+			return (void*)&uc_string_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data");
 	}
 }
 
+
+
+//---------------------------STRING STATE---------------------------
+
 /**
+ * state string
+ *
+ * Handles string data types
+ */
+void *uc_string_state(void)
+{
+	switch(uc_current_character())
+	{
+		case 'L':
+			return (void*)&uc_string_letter_state;
+		case 'W':
+			return (void*)&uc_string_whitespace_state;
+		case 'P':
+			return (void*)&uc_string_punctuation_state;
+		case 'E':
+			return uc_end_string();
+		default:
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string");
+	}
+}
+
+/**
+ * state string_letter
+ *
+ * Handles letters in strings
+ */
+void *uc_string_letter_state(void)
+{
+	switch(uc_current_character())
+	{
+		case 'U':
+			return (void *)&uc_string_uppercase_state;
+		case 'L':
+			return (void *)&uc_string_lowercase_state;
+		default:
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_letter");
+	}	
+}
+
+/**
+ * state string_uppercase
+ *
+ * Handles uppercase letters in strings
+ */
+void *uc_string_uppercase_state(void)
+{
+	char c = uc_uppercase();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_letter -> string_uppercase");
+	}
+	else if (uc_char_stack_push(c))
+	{
+		return (void *)&uc_string_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_letter -> string_uppercase");
+	}
+}
+
+/**
+ * state string_lowercase
+ *
+ * Handles lowercase letters in strings
+ */
+void *uc_string_lowercase_state(void)
+{
+	char c = uc_lowercase();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_letter -> string_lowercase");
+	}
+	else if (uc_char_stack_push(c))
+	{
+		return (void *)&uc_string_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_letter -> string_lowercase");
+	}
+}
+
+/**
+ * state string_whitespace
+ *
+ * Handles whitespace characters in strings
+ */
+void *uc_string_whitespace_state(void)
+{
+	char c = uc_whitespace();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_whitespace");
+	}
+	else if (uc_char_stack_push(c))
+	{
+		return (void *)&uc_string_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_whitespace");
+	}
+}
+
+/**
+ * state string_punctuation
+ *
+ * Handles punctuation in strings
+ */
+void *uc_string_punctuation_state(void)
+{
+	char c = uc_punctuation();
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_punctuation");
+	}
+	else if (uc_char_stack_push(c))
+	{
+		return (void *)&uc_string_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_punctuation");
+	}
+}
+
+//--------------------------CHARACTER STATE-------------------------
+
+/**
+ * state character
+ * 
  * Handles string data types
  */
 void *uc_character_state(void)
@@ -78,41 +226,45 @@ void *uc_character_state(void)
 	switch(uc_current_character())
 	{
 		case 'L':
-			return (void *)&uc_letter_state;
+			return (void *)&uc_character_letter_state;
 		case 'W':
-			return (void *)&uc_whitespace_state;
+			return (void *)&uc_character_whitespace_state;
 		case 'P':
-			return (void *)&uc_punctuation_state;
+			return (void *)&uc_character_punctuation_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character");
 	}
 }
 
 /**
+ * state character_letter
+ *
  * Handles letters
  */
-void *uc_letter_state(void)
+void *uc_character_letter_state(void)
 {
 	switch(uc_current_character())
 	{
 		case 'U':
-			return (void *)&uc_uppercase_state;
+			return (void *)&uc_character_uppercase_state;
 		case 'L':
-			return (void *)&uc_lowercase_state;
+			return (void *)&uc_character_lowercase_state;
 		default:
-			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> letter");
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_letter");
 	}
 }
 
 /**
+ * state character_uppercase
+ *
  * Handles uppercase letters
  */
-void *uc_uppercase_state(void)
+void *uc_character_uppercase_state(void)
 {
 	char c = uc_uppercase();
 	if (c == 0)
 	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> letter -> uppercase");
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_letter -> character_uppercase");
 	}
 	else if (uc_stack_push(uc_datum_from_char(c)))
 	{
@@ -120,19 +272,21 @@ void *uc_uppercase_state(void)
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> uppercase");
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_letter -> character_uppercase");
 	}
 }
 
 /**
+ * state character_lowercase
+ *
  * Handles lowercase letters
  */
-void *uc_lowercase_state(void)
+void *uc_character_lowercase_state(void)
 {
 	char c = uc_lowercase();
 	if (c == 0)
 	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> letter -> lowercase");
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_letter -> character_lowercase");
 	}
 	else if (uc_stack_push(uc_datum_from_char(c)))
 	{
@@ -140,19 +294,21 @@ void *uc_lowercase_state(void)
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> lowercase");
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_letter -> character_lowercase");
 	}
 }
 
 /**
+ * state character_whitespace
+ *
  * Handles whitespace characters
  */
-void *uc_whitespace_state(void)
+void *uc_character_whitespace_state(void)
 {
 	char c = uc_whitespace();
 	if (c == 0)
 	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> whitespace");
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_whitespace");
 	}
 	else if (uc_stack_push(uc_datum_from_char(c)))
 	{
@@ -160,19 +316,21 @@ void *uc_whitespace_state(void)
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> whitespace");
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_whitespace");
 	}
 }
 
 /**
+ * state character_punctuation
+ *
  * Handles punctuation
  */
-void *uc_punctuation_state(void)
+void *uc_character_punctuation_state(void)
 {
 	char c = uc_punctuation();
 	if (c == 0)
 	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> punctuation");
+		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_punctuation");
 	}
 	else if (uc_stack_push(uc_datum_from_char(c)))
 	{
@@ -180,7 +338,7 @@ void *uc_punctuation_state(void)
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> letter -> punctuation");
+		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_punctuation");
 	}
 }
 
@@ -247,5 +405,30 @@ static char uc_punctuation(void)
 			return '\'';
 		default:
 			return 0;
+	}
+}
+
+/**
+ * Ends the current string
+ *
+ * @return the next state which depends on 
+ *		   if the current string was ended successfully
+ */
+static void* uc_end_string(void)
+{
+	if (uc_char_stack_push('\0'))
+	{
+		if (uc_stack_push(uc_char_stack_get_string()))
+		{
+			return (void*)&uc_main_state;
+		}
+		else
+		{
+			return uc_throw_error(UC_STACK_FULL, "main -> data -> string -> end");
+		}
+	}
+	else
+	{
+		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> end");
 	}
 }
