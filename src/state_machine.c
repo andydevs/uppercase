@@ -42,10 +42,16 @@ int uc_run(void)
 	// Untill current state is null or there are no more characters
 	while (uc_current_state != NULL && uc_next_character())
 	{
-		// If an invalid character is spotted, return error
+		// If an invalid character is spotted
 		if (uc_invalid_character())
 		{
+			// Throw error
 			uc_throw_error(UC_INPUT_CHAR_INVALD, "[RUN]");
+
+			// Don't forget to clear the stack
+			uc_stack_clear();
+
+			// Return error
 			return 1;
 		}
 
