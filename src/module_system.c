@@ -29,6 +29,11 @@
  */
 static void uc_print(void);
 
+/**
+ * Inspects the last datum on the stack, then destroys it
+ */
+static void uc_inspect(void);
+
 
 
 //----------------------------STATE FUNCTIONS----------------------------
@@ -44,6 +49,9 @@ void *uc_system_state(void)
 	{
 		case 'P':
 			uc_print();
+			return &uc_main_state;
+		case 'I':
+			uc_inspect();
 			return &uc_main_state;
 		case 'S':
 			return &uc_stack_state;
@@ -84,4 +92,15 @@ static void uc_print(void)
 	uc_datum *d = uc_stack_pop();
 	uc_datum_print(d);
 	uc_datum_destroy(d);
+}
+
+/**
+ * Inspects the last datum on the stack, then destroys it
+ */
+static void uc_inspect(void)
+{
+	uc_datum *d = uc_stack_pop();
+	uc_datum_inspect(d);
+	uc_datum_destroy(d);
+	printf("\n");
 }
