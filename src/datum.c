@@ -169,6 +169,7 @@ void uc_datum_inspect(uc_datum *d)
 			printf("char: '");
 			uc_inspect_character(d->value.char_value);
 			printf("'");
+			return;
 		case INT:
 			printf("int: %d", d->value.integer_value);
 			return;

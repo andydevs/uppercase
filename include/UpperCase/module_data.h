@@ -123,4 +123,29 @@ void *uc_character_whitespace_state(void);
  */
 void *uc_character_punctuation_state(void);
 
+
+
+//----------------------------NUMBER STATE--------------------------
+
+/**
+ * state boolean
+ *
+ * Handles booleans
+ */
+void *uc_boolean_state(void);
+
+/**
+ * state integer
+ *
+ * Handles integers
+ */
+void *uc_integer_state(void);
+
+/**
+ * state integer
+ *
+ * Handles integers
+ */
+void *uc_float_state(void);
+
 #endif

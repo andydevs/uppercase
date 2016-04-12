@@ -199,6 +199,26 @@ uc_datum* uc_char_stack_get_string(void)
 }
 
 /**
+ * Returns an integer datum from the char stack
+ *
+ * @return an integer datum from the char stack
+ */
+uc_datum *uc_char_stack_get_integer(void)
+{
+	return uc_datum_from_integer(atoi(uc_char_stack));
+}
+
+/**
+ * Returns a float datum from the char stack
+ *
+ * @return a float datum from the char stack
+ */
+uc_datum *uc_char_stack_get_float(void)
+{
+	return uc_datum_from_float(atof(uc_char_stack));
+}
+
+/**
  * Clears the char stack
  */
 void uc_char_stack_clear(void)
@@ -207,5 +227,5 @@ void uc_char_stack_clear(void)
 	{
 		uc_char_stack[i] = 0;
 	}
-	uc_stack_cursor = 0;
+	uc_char_stack_cursor = 0;
 }

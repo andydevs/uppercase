@@ -22,6 +22,8 @@
 #include "UpperCase/stack.h"
 #include "UpperCase/error.h"
 
+#include <stdio.h>
+
 //----------------------------HELPER HEADERS-----------------------------
 
 /**

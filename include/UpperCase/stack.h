@@ -96,6 +96,20 @@ int uc_char_stack_push(char c);
 uc_datum *uc_char_stack_get_string(void);
 
 /**
+ * Returns an integer datum from the char stack
+ *
+ * @return an integer datum from the char stack
+ */
+uc_datum *uc_char_stack_get_integer(void);
+
+/**
+ * Returns a float datum from the char stack
+ *
+ * @return a float datum from the char stack
+ */
+uc_datum *uc_char_stack_get_float(void);
+
+/**
  * Clears the char stack
  */
 void uc_char_stack_clear(void);

@@ -53,17 +53,60 @@ static char uc_whitespace(void);
 static char uc_punctuation(void);
 
 /**
- * Ends the current string
+ * Parses an integer digit from the current character
  *
- * @return the next state which depends on 
- *		   if the current string was ended successfully
+ * @returns integer digit from the current character
  */
-static void* uc_end_string(void);
+static char uc_integer_digit(void);
+
+/**
+ * Parses a float digit from the current character
+ *
+ * @returns float digit from the current character
+ */
+static char uc_float_digit(void);
+
+/**
+ * Adds the given character as a datum to the stack
+ *
+ * @param c 		 		the character to add
+ * @param next_state 		the next state to transition to 
+ * 					 		if the character is successfully added
+ * @param state_description the description of the current state to print 
+ *							if an error is thrown
+ *
+ * @return the next state depending on if the character is successfully added
+ */
+static void* uc_add_character_data(char c, void* next_state, const char* state_description);
+
+/**
+ * Adds the given character to the char stack
+ *
+ * @param c 		 		the character to add
+ * @param next_state 		the next state to transition to 
+ * 					 		if the character is successfully added
+ * @param state_description the description of the current state to print 
+ *							if an error is thrown
+ *
+ * @return the next state depending on if the character is successfully added
+ */
+static void* uc_add_character(char c, void* next_state, const char* state_description);
+
+/**
+ * Terminates a long data sequence and adds it to the stack as the given type
+ *
+ * @param type 				the type of the datum to add from the char stack 
+ *							(must be string, float, or int)
+ * @param state_description the description of the current state to print
+ *							if an error is thrown
+ *
+ * @return the next state depending on if the character is successfully added
+ */
+static void* uc_end_long_data(uc_datum_type type, const char* state_description);
 
 
 
-
-//----------------------------STATE FUNCTIONS----------------------------
+//----------------------------DATA STATE----------------------------
 
 /**
  * The data state
@@ -74,9 +117,17 @@ void *uc_data_state(void)
 	{
 		case 'C':
 			return (void*)&uc_character_state;
+		case 'B':
+			return (void*)&uc_boolean_state;
 		case 'S':
 			uc_char_stack_clear();
 			return (void*)&uc_string_state;
+		case 'I':
+			uc_char_stack_clear();
+			return (void*)&uc_integer_state;
+		case 'F':
+			uc_char_stack_clear();
+			return (void*)&uc_float_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data");
 	}
@@ -102,7 +153,7 @@ void *uc_string_state(void)
 		case 'P':
 			return (void*)&uc_string_punctuation_state;
 		case 'E':
-			return uc_end_string();
+			return uc_end_long_data(STRING, "main -> data -> string");
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string");
 	}
@@ -133,19 +184,7 @@ void *uc_string_letter_state(void)
  */
 void *uc_string_uppercase_state(void)
 {
-	char c = uc_uppercase();
-	if (c == 0)
-	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_letter -> string_uppercase");
-	}
-	else if (uc_char_stack_push(c))
-	{
-		return (void *)&uc_string_state;
-	}
-	else
-	{
-		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_letter -> string_uppercase");
-	}
+	return uc_add_character(uc_uppercase(), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 /**
@@ -155,19 +194,7 @@ void *uc_string_uppercase_state(void)
  */
 void *uc_string_lowercase_state(void)
 {
-	char c = uc_lowercase();
-	if (c == 0)
-	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_letter -> string_lowercase");
-	}
-	else if (uc_char_stack_push(c))
-	{
-		return (void *)&uc_string_state;
-	}
-	else
-	{
-		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_letter -> string_lowercase");
-	}
+	return uc_add_character(uc_lowercase(), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 /**
@@ -177,19 +204,7 @@ void *uc_string_lowercase_state(void)
  */
 void *uc_string_whitespace_state(void)
 {
-	char c = uc_whitespace();
-	if (c == 0)
-	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_whitespace");
-	}
-	else if (uc_char_stack_push(c))
-	{
-		return (void *)&uc_string_state;
-	}
-	else
-	{
-		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_whitespace");
-	}
+	return uc_add_character(uc_whitespace(), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 /**
@@ -199,19 +214,7 @@ void *uc_string_whitespace_state(void)
  */
 void *uc_string_punctuation_state(void)
 {
-	char c = uc_punctuation();
-	if (c == 0)
-	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> string -> string_punctuation");
-	}
-	else if (uc_char_stack_push(c))
-	{
-		return (void *)&uc_string_state;
-	}
-	else
-	{
-		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> string_punctuation");
-	}
+	return uc_add_character(uc_punctuation(), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 //--------------------------CHARACTER STATE-------------------------
@@ -261,19 +264,7 @@ void *uc_character_letter_state(void)
  */
 void *uc_character_uppercase_state(void)
 {
-	char c = uc_uppercase();
-	if (c == 0)
-	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_letter -> character_uppercase");
-	}
-	else if (uc_stack_push(uc_datum_from_char(c)))
-	{
-		return (void *)&uc_main_state;
-	}
-	else
-	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_letter -> character_uppercase");
-	}
+	return uc_add_character_data(uc_uppercase(), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_uppercase");
 }
 
 /**
@@ -283,19 +274,7 @@ void *uc_character_uppercase_state(void)
  */
 void *uc_character_lowercase_state(void)
 {
-	char c = uc_lowercase();
-	if (c == 0)
-	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_letter -> character_lowercase");
-	}
-	else if (uc_stack_push(uc_datum_from_char(c)))
-	{
-		return (void *)&uc_main_state;
-	}
-	else
-	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_letter -> character_lowercase");
-	}
+	return uc_add_character_data(uc_lowercase(), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_lowercase");
 }
 
 /**
@@ -305,19 +284,7 @@ void *uc_character_lowercase_state(void)
  */
 void *uc_character_whitespace_state(void)
 {
-	char c = uc_whitespace();
-	if (c == 0)
-	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_whitespace");
-	}
-	else if (uc_stack_push(uc_datum_from_char(c)))
-	{
-		return (void *)&uc_main_state;
-	}
-	else
-	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_whitespace");
-	}
+	return uc_add_character_data(uc_whitespace(), (void*)&uc_main_state, "main -> data -> character -> character_whitespace");
 }
 
 /**
@@ -327,18 +294,64 @@ void *uc_character_whitespace_state(void)
  */
 void *uc_character_punctuation_state(void)
 {
-	char c = uc_punctuation();
-	if (c == 0)
+	return uc_add_character_data(uc_punctuation(), (void*)&uc_main_state, "main -> data -> character -> character_punctuation");
+}
+
+
+
+//----------------------------NUMBER STATE--------------------------
+
+/**
+ * state boolean
+ *
+ * Handles booleans
+ */
+void *uc_boolean_state(void)
+{
+	switch(uc_current_character())
 	{
-		return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> character -> character_punctuation");
+		case 'T':
+			uc_stack_push(uc_datum_from_boolean(1));
+			return (void*)&uc_main_state;
+		case 'F':
+			uc_stack_push(uc_datum_from_boolean(0));
+			return (void*)&uc_main_state;
+		default:
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> boolean");
 	}
-	else if (uc_stack_push(uc_datum_from_char(c)))
+}
+
+/**
+ * state integer
+ *
+ * Handles integers
+ */
+void *uc_integer_state(void)
+{
+	if (uc_current_character() == 'E')
 	{
-		return (void *)&uc_main_state;
+		return uc_end_long_data(INT, "main -> data -> integer");
 	}
 	else
 	{
-		return uc_throw_error(UC_STACK_FULL, "main -> data -> character -> character_punctuation");
+		return uc_add_character(uc_integer_digit(), (void*)&uc_integer_state, "main -> data -> integer");
+	}
+}
+
+/**
+ * state float
+ *
+ * Handles floats
+ */
+void *uc_float_state(void)
+{
+	if (uc_current_character() == 'E')
+	{
+		return uc_end_long_data(FLOAT, "main -> data -> float");
+	}
+	else
+	{
+		return uc_add_character(uc_float_digit(), (void*)&uc_float_state, "main -> data -> float");
 	}
 }
 
@@ -409,26 +422,169 @@ static char uc_punctuation(void)
 }
 
 /**
- * Ends the current string
+ * Parses an integer digit from the current character
  *
- * @return the next state which depends on 
- *		   if the current string was ended successfully
+ * @returns integer digit from the current character
  */
-static void* uc_end_string(void)
+static char uc_integer_digit(void)
+{
+	switch(uc_current_character())
+	{
+		case 'A':
+			return '0';
+		case 'B':
+			return '1';
+		case 'C':
+			return '2';
+		case 'D':
+			return '3';
+		case 'F':
+			return '4';
+		case 'G':
+			return '5';
+		case 'H':
+			return '6';
+		case 'I':
+			return '7';
+		case 'J':
+			return '8';
+		case 'K':
+			return '9';
+		default:
+			return 0;
+	}
+}
+
+/**
+ * Parses a float digit from the current character
+ *
+ * @returns float digit from the current character
+ */
+static char uc_float_digit(void)
+{
+	switch(uc_current_character())
+	{
+		case 'A':
+			return '0';
+		case 'B':
+			return '1';
+		case 'C':
+			return '2';
+		case 'D':
+			return '3';
+		case 'F':
+			return '4';
+		case 'G':
+			return '5';
+		case 'H':
+			return '6';
+		case 'I':
+			return '7';
+		case 'J':
+			return '8';
+		case 'K':
+			return '9';
+		case 'P':
+			return '.';
+		default:
+			return 0;
+	}
+}
+
+/**
+ * Adds the given character as a datum to the stack
+ *
+ * @param c 		 		the character to add
+ * @param next_state 		the next state to transition to 
+ * 					 		if the character is successfully added
+ * @param state_description the description of the current state to print 
+ *							if an error is thrown
+ *
+ * @return the next state depending on if the character is successfully added
+ */
+static void* uc_add_character(char c, void* next_state, const char* state_description)
+{
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, state_description);
+	}
+	else if (uc_char_stack_push(c))
+	{
+		return next_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_CHAR_STACK_FULL, state_description);
+	}
+}
+
+/**
+ * Adds the given character to the char stack
+ *
+ * @param c 		 		the character to add
+ * @param next_state 		the next state to transition to 
+ * 					 		if the character is successfully added
+ * @param state_description the description of the current state to print 
+ *							if an error is thrown
+ *
+ * @return the next state depending on if the character is successfully added
+ */
+static void* uc_end_long_data(uc_datum_type type, const char* state_description)
 {
 	if (uc_char_stack_push('\0'))
 	{
-		if (uc_stack_push(uc_char_stack_get_string()))
+		uc_datum *d;
+		switch(type)
+		{
+			case STRING:
+				d = uc_char_stack_get_string();
+				break;
+			case FLOAT:
+				d = uc_char_stack_get_float();
+				break;
+			case INT:
+				d = uc_char_stack_get_integer();
+				break;
+			default:
+				break;
+		}
+		if (uc_stack_push(d))
 		{
 			return (void*)&uc_main_state;
 		}
 		else
 		{
-			return uc_throw_error(UC_STACK_FULL, "main -> data -> string -> end");
+			return uc_throw_error(UC_STACK_FULL, state_description);
 		}
 	}
 	else
 	{
-		return uc_throw_error(UC_CHAR_STACK_FULL, "main -> data -> string -> end");
+		return uc_throw_error(UC_CHAR_STACK_FULL, state_description);
+	}
+}
+
+/**
+ * Terminates a long data sequence and adds it to the stack as the given type
+ *
+ * @param type 				the type of the datum to add from the char stack 
+ *							(must be string, float, or int)
+ * @param state_description the description of the current state to print
+ *							if an error is thrown
+ *
+ * @return the next state depending on if the character is successfully added
+ */
+static void* uc_add_character_data(char c, void* next_state, const char* state_description)
+{
+	if (c == 0)
+	{
+		return uc_throw_error(UC_CHAR_NOT_FOUND, state_description);
+	}
+	else if (uc_stack_push(uc_datum_from_char(c)))
+	{
+		return next_state;
+	}
+	else
+	{
+		return uc_throw_error(UC_CHAR_STACK_FULL, state_description);
 	}
 }
