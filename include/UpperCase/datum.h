@@ -98,7 +98,16 @@ uc_datum *uc_datum_from_integer(int value);
  *
  * @return a new string uc_datum value from the given value
  */
- uc_datum *uc_datum_from_string(char *value);
+uc_datum *uc_datum_from_string(char *value);
+
+/**
+ * Creates a new string uc_datum value from the given value (as a const char*)
+ *
+ * @param value the string value of the uc_datum (as a const char*)
+ *
+ * @return a new string uc_datum value from the given value
+ */
+uc_datum *uc_datum_from_const_string(const char *value);
 
 /**
  * Prints the given datum to the console

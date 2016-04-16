@@ -36,7 +36,7 @@ static void uc_inspect_character(char c);
 
 
 
-//----------------------------HELPER HEADERS-----------------------------
+//-----------------------------CONSTRUCTORS-----------------------------
 
 /**
  * Creates a new boolean uc_datum value from the given value
@@ -114,6 +114,26 @@ uc_datum *uc_datum_from_string(char *value)
 }
 
 /**
+ * Creates a new string uc_datum value from the given value (as a const char*)
+ *
+ * @param value the string value of the uc_datum (as a const char*)
+ *
+ * @return a new string uc_datum value from the given value
+ */
+uc_datum *uc_datum_from_const_string(const char *value)
+{
+	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	d->type = STRING;
+	d->value.string_value = (char*)malloc(strlen(value));
+	strcpy(d->value.string_value, value);
+	return d;
+}
+
+
+
+//------------------------------FUNCTIONS-------------------------------
+
+/**
  * Prints the given data to the console
  *
  * @param d the data being printed
@@ -178,6 +198,10 @@ void uc_datum_inspect(uc_datum *d)
 			return;
 	}
 }
+
+
+
+//------------------------------DESTRUCTOR-------------------------------
 
 /**
  * Destroys the given datum

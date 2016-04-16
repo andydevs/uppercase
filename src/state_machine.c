@@ -94,18 +94,18 @@ int uc_register_module(char name, uc_state function)
 {
 	if (!(name >= 'A' && name <= 'Z'))
 	{
-		uc_throw_error(UC_INPUT_CHAR_INVALD, "[INIT]");
-		return 1;
+		printf("REGISTRY ERROR: Invalid character slot: '%c'\n", name);
+		return 0;
 	}
 
 	if (uc_main_registry[name - 'A'] != NULL)
 	{
-		uc_throw_error(UC_REGISTRY_MODULE_SLOT_FILLED, "[INIT]");
-		return 1;
+		printf("REGISTRY ERROR: Slot filled: '%c'\n", name);
+		return 0;
 	}
 
 	uc_main_registry[name - 'A'] = function;
-	return 0;
+	return 1;
 }
 
 /**
