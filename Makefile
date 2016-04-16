@@ -22,11 +22,11 @@ BINARY  = $(BINDIR)/$(TARGET)
 TESTFILE = tmp/testfile.u
 
 $(BINARY): $(OBJECTS)
-	test -d $(@D) || mkdir $(@D)
+	@ test -d $(@D) || mkdir $(@D)
 	$(LINK) $? -o $@ $(LFLAGS) $(LIBRAR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	test -d $(@D) || mkdir $(@D)
+	@ test -d $(@D) || mkdir $(@D)
 	$(COMPILE) $< -o $@ $(CFLAGS) $(INCLUD)
 
 clean:

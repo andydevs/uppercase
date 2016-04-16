@@ -20,6 +20,7 @@
 #include "UpperCase/datum.h"
 #include "UpperCase/module_data.h"
 #include "UpperCase/module_system.h"
+#include "UpperCase/module_math.h"
 
 #include <stdio.h>
 
@@ -51,6 +52,7 @@ int main(int argc, char const *argv[])
 	int allRegistered = 1;
 	allRegistered &= uc_register_module('D', &uc_data_state);
 	allRegistered &= uc_register_module('S', &uc_system_state);
+	allRegistered &= uc_register_module('M', &uc_math_state);
 
 	// Run program if all modules have been registrered
 	int status = allRegistered ? uc_run() : 1;

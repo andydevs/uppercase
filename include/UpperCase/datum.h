@@ -19,6 +19,16 @@
 #ifndef _UC_DATUM_H_
 #define _UC_DATUM_H_
 
+//-----------------------------CONSTANTS-------------------------------
+
+/**
+ * The maximum length of a string in UpperCase
+ */
+#define UC_STRING_MAX_LENGTH 512
+
+
+//--------------------------DATUM DEFINITION---------------------------
+
 /**
  * Represents a type of data
  *
@@ -54,6 +64,10 @@ typedef struct
 	value;
 }
 uc_datum;
+
+
+
+//-----------------------------CONSTRUCTORS-----------------------------
 
 /**
  * Creates a new boolean uc_datum value from the given value
@@ -109,6 +123,24 @@ uc_datum *uc_datum_from_string(char *value);
  */
 uc_datum *uc_datum_from_const_string(const char *value);
 
+
+
+//------------------------------FUNCTIONS-------------------------------
+
+/**
+ * Returns the addition of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the addition of te two given data
+ */
+uc_datum* uc_datum_add(uc_datum* a, uc_datum* b);
+
+
+
+//------------------------------FUNCTIONS-------------------------------
+
 /**
  * Prints the given datum to the console
  *
@@ -122,6 +154,10 @@ void uc_datum_print(uc_datum *d);
  * @param d the datum being inspected
  */
 void uc_datum_inspect(uc_datum *d);
+
+
+
+//------------------------------DESTRUCTOR-------------------------------
 
 /**
  * Destroys the given datum

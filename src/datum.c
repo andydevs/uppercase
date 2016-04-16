@@ -27,12 +27,94 @@
 
 //----------------------------HELPER HEADERS-----------------------------
 
+//--------------INSPECT--------------
+
 /**
  * Prints a representation of the given character for inspection
  *
  * @param c the character to inspect
  */
 static void uc_inspect_character(char c);
+
+
+//-----------STRING CONCAT-----------
+
+/**
+ * Returns the concatenation of the two string data
+ *
+ * @param a the first string datum
+ * @param b the second string datum
+ *
+ * @return the concatenation of the two string data
+ */
+static uc_datum* uc_datum_string_concat(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns a string representing the datum
+ *
+ * @param a the datum to represent as a string
+ *
+ * @return a string representing the datum
+ */
+static char* uc_datum_repr_string(uc_datum* a);
+
+
+//------------CHAR CONCAT------------
+
+/**
+ * Returns the concatenation of the two char data
+ *
+ * @param a the first char datum
+ * @param b the second char datum
+ *
+ * @return the concatenation of the two char data
+ */
+static uc_datum* uc_datum_char_concat(uc_datum* a, uc_datum* b);
+
+
+//-----------INTEGER ADD-----------
+
+/**
+ * Returns the addition of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the concatenation of the two integer data
+ */
+static uc_datum* uc_datum_integer_add(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns a integer representing the datum
+ *
+ * @param a the datum to represent as a integer
+ *
+ * @return a integer representing the datum
+ */
+static int uc_datum_repr_integer(uc_datum* a);
+
+
+//-----------FLOAT ADD-----------
+
+/**
+ * Returns the addition of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the concatenation of the two float data
+ */
+static uc_datum* uc_datum_float_add(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns a float representing the datum
+ *
+ * @param a the datum to represent as a float
+ *
+ * @return a float representing the datum
+ */
+static double uc_datum_repr_float(uc_datum* a);
+
 
 
 
@@ -131,6 +213,38 @@ uc_datum *uc_datum_from_const_string(const char *value)
 
 
 
+//------------------------------OPERATORS-------------------------------
+
+/**
+ * Returns the addition of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the addition of te two given data
+ */
+uc_datum* uc_datum_add(uc_datum* a, uc_datum* b)
+{
+	if (a->type == STRING || b->type == STRING)
+	{
+		return uc_datum_string_concat(a, b);
+	}
+	else if (a->type == CHAR && b->type == CHAR)
+	{
+		return uc_datum_char_concat(a, b);
+	}
+	else if (a->type == FLOAT || b->type == FLOAT)
+	{
+		return uc_datum_float_add(a, b);
+	}
+	else
+	{
+		return uc_datum_integer_add(a, b);
+	}
+}
+
+
+
 //------------------------------FUNCTIONS-------------------------------
 
 /**
@@ -221,6 +335,8 @@ void uc_datum_destroy(uc_datum *d)
 
 //---------------------------HELPER FUNCTIONS----------------------------
 
+//--------------INSPECT--------------
+
 /**
  * Prints a representation of the given character for inspection
  *
@@ -242,5 +358,182 @@ static void uc_inspect_character(char c)
 		default:
 			printf("%c", c);
 			return;
+	}
+}
+
+
+//-----------STRING CONCAT-----------
+
+/**
+ * Returns the concatenation of the two string data
+ *
+ * @param a the first string datum
+ * @param b the second string datum
+ *
+ * @return the concatenation of the two string data
+ */
+static uc_datum* uc_datum_string_concat(uc_datum* a, uc_datum* b)
+{
+	char* stra = uc_datum_repr_string(a);
+	char* strb = uc_datum_repr_string(b);
+
+	char* strc = (char*)malloc(strlen(stra) + strlen(strb) - 1);
+	strcpy(strc, stra);
+	strcat(strc, strb);
+
+	free(stra);
+	free(strb);
+
+	return uc_datum_from_string(strc);
+}
+
+/**
+ * Returns a string representing the datum
+ *
+ * @param a the datum to represent as a string
+ *
+ * @return a string representing the datum
+ */
+static char* uc_datum_repr_string(uc_datum* d)
+{
+	char* string;
+	if (d->type == CHAR || d->type == BOOLEAN)
+	{
+		string = (char*)malloc(2);
+		string[1] = '\0';
+
+		if (d->type == BOOLEAN)
+		{
+			string[0] = d->value.boolean_value ? 'T' : 'F';
+		}
+		else
+		{
+			string[0] = d->value.char_value;
+		}
+	}
+	else
+	{
+		string = (char*)malloc(UC_STRING_MAX_LENGTH);
+		memset(string, '\0', UC_STRING_MAX_LENGTH);
+		switch(d->type)
+		{
+			case STRING:
+				strcpy(string, d->value.string_value);
+				break;
+			case FLOAT:
+				sprintf(string, "%f", d->value.float_value);
+				break;
+			case INT:
+				sprintf(string, "%d", d->value.integer_value);
+				break;
+			default:
+				break;
+		}
+		string = (char*)realloc(string, strlen(string));
+	}
+	return string;
+}
+
+
+//------------CHAR CONCAT------------
+
+/**
+ * Returns the concatenation of the two char data
+ *
+ * @param a the first char datum
+ * @param b the second char datum
+ *
+ * @return the concatenation of the two char data
+ */
+static uc_datum* uc_datum_char_concat(uc_datum* a, uc_datum* b)
+{
+	char* string = (char*)malloc(3);
+	string[0] = a->value.char_value;
+	string[1] = b->value.char_value;
+	string[2] = '\0';
+	return uc_datum_from_string(string);
+}
+
+
+//-----------INTEGER ADD-----------
+
+/**
+ * Returns the addition of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the concatenation of the two integer data
+ */
+static uc_datum* uc_datum_integer_add(uc_datum* a, uc_datum* b)
+{
+	int inta = uc_datum_repr_integer(a);
+	int intb = uc_datum_repr_integer(b);
+	return uc_datum_from_integer(inta + intb);
+}
+
+/**
+ * Returns a integer representing the datum
+ *
+ * @param a the datum to represent as a integer
+ *
+ * @return a integer representing the datum
+ */
+static int uc_datum_repr_integer(uc_datum* a)
+{
+	switch(a->type)
+	{
+		case BOOLEAN:
+			return (int)a->value.boolean_value;
+		case FLOAT:
+			return (int)a->value.float_value;
+		case CHAR:
+			return (int)a->value.char_value;
+		case INT:
+			return (int)a->value.integer_value;
+		default:
+			return 0;
+	}
+}
+
+
+//-----------FLOAT ADD-----------
+
+/**
+ * Returns the addition of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the concatenation of the two float data
+ */
+static uc_datum* uc_datum_float_add(uc_datum* a, uc_datum* b)
+{
+	double doublea = uc_datum_repr_float(a);
+	double doubleb = uc_datum_repr_float(b);
+	return uc_datum_from_float(doublea + doubleb);
+}
+
+/**
+ * Returns a float representing the datum
+ *
+ * @param a the datum to represent as a float
+ *
+ * @return a float representing the datum
+ */
+static double uc_datum_repr_float(uc_datum* a)
+{
+	switch(a->type)
+	{
+		case BOOLEAN:
+			return (double)a->value.boolean_value;
+		case FLOAT:
+			return (double)a->value.float_value;
+		case CHAR:
+			return (double)a->value.char_value;
+		case INT:
+			return (double)a->value.integer_value;
+		default:
+			return 0.0;
 	}
 }

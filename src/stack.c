@@ -35,7 +35,7 @@ static uc_datum* uc_stack[UC_STACK_LENGTH];
 /**
  * The character stack
  */
-static char uc_char_stack[UC_CHAR_STACK_LENGTH];
+static char uc_char_stack[UC_STRING_MAX_LENGTH];
 
 /**
  * The current position in the stack
