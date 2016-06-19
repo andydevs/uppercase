@@ -107,6 +107,36 @@ static uc_datum* uc_datum_integer_add(uc_datum* a, uc_datum* b);
 static uc_datum* uc_datum_integer_subtract(uc_datum* a, uc_datum* b);
 
 /**
+ * Returns the multiplication of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the multiplication of the two integer data
+ */
+static uc_datum* uc_datum_integer_multiply(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the division of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the division of the two integer data
+ */
+static uc_datum* uc_datum_integer_divide(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the modulus of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the modulus of the two integer data
+ */
+static uc_datum* uc_datum_integer_modulus(uc_datum* a, uc_datum* b);
+
+/**
  * Returns a integer representing the datum
  *
  * @param a the datum to represent as a integer
@@ -137,6 +167,26 @@ static uc_datum* uc_datum_float_add(uc_datum* a, uc_datum* b);
  * @return the subtraction of the two float data
  */
 static uc_datum* uc_datum_float_subtract(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the multiplication of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the multiplication of the two float data
+ */
+static uc_datum* uc_datum_float_multiply(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the division of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the division of the two float data
+ */
+static uc_datum* uc_datum_float_divide(uc_datum* a, uc_datum* b);
 
 /**
  * Returns a float representing the datum
@@ -313,6 +363,78 @@ uc_datum* uc_datum_subtract(uc_datum* a, uc_datum* b)
 	else
 	{
 		return uc_datum_integer_subtract(a, b);
+	}
+}
+
+/**
+ * Returns the multiplication of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the multiplication of te two given data
+ */
+uc_datum* uc_datum_multiply(uc_datum* a, uc_datum* b)
+{
+	if (a->type == UNDEFINED || b->type == UNDEFINED 
+		|| a->type == STRING || b->type == STRING)
+	{
+		return uc_datum_undefined();
+	}
+	else if (a->type == FLOAT || b->type == FLOAT)
+	{
+		return uc_datum_float_multiply(a, b);
+	}
+	else
+	{
+		return uc_datum_integer_multiply(a, b);
+	}
+}
+
+/**
+ * Returns the division of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the division of te two given data
+ */
+uc_datum* uc_datum_divide(uc_datum* a, uc_datum* b)
+{
+	if (a->type == UNDEFINED || b->type == UNDEFINED 
+		|| a->type == STRING || b->type == STRING)
+	{
+		return uc_datum_undefined();
+	}
+	else if (a->type == FLOAT || b->type == FLOAT)
+	{
+		return uc_datum_float_divide(a, b);
+	}
+	else
+	{
+		return uc_datum_integer_divide(a, b);
+	}
+}
+
+/**
+ * Returns the modulus of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the modulus of te two given data
+ */
+uc_datum* uc_datum_modulus(uc_datum* a, uc_datum* b)
+{
+	if (a->type == UNDEFINED || b->type == UNDEFINED 
+		|| a->type == STRING || b->type == STRING
+		|| a->type == FLOAT || b->type == FLOAT)
+	{
+		return uc_datum_undefined();
+	}
+	else
+	{
+		return uc_datum_integer_modulus(a, b);
 	}
 }
 
@@ -578,6 +700,51 @@ static uc_datum* uc_datum_integer_subtract(uc_datum* a, uc_datum* b)
 }
 
 /**
+ * Returns the multiplication of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the multiplication of the two integer data
+ */
+static uc_datum* uc_datum_integer_multiply(uc_datum* a, uc_datum* b)
+{
+	int inta = uc_datum_repr_integer(a);
+	int intb = uc_datum_repr_integer(b);
+	return uc_datum_from_integer(inta * intb);
+}
+
+/**
+ * Returns the division of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the division of the two integer data
+ */
+static uc_datum* uc_datum_integer_divide(uc_datum* a, uc_datum* b)
+{
+	int inta = uc_datum_repr_integer(a);
+	int intb = uc_datum_repr_integer(b);
+	return uc_datum_from_integer(inta / intb);
+}
+
+/**
+ * Returns the modulus of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the modulus of the two integer data
+ */
+static uc_datum* uc_datum_integer_modulus(uc_datum* a, uc_datum* b)
+{
+	int inta = uc_datum_repr_integer(a);
+	int intb = uc_datum_repr_integer(b);
+	return uc_datum_from_integer(inta % intb);	
+}
+
+/**
  * Returns a integer representing the datum
  *
  * @param a the datum to represent as a integer
@@ -633,6 +800,37 @@ static uc_datum* uc_datum_float_subtract(uc_datum* a, uc_datum* b)
 	double floatb = uc_datum_repr_float(b);
 	return uc_datum_from_float(floata - floatb);
 }
+
+/**
+ * Returns the multiplication of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the multiplication of the two float data
+ */
+static uc_datum* uc_datum_float_multiply(uc_datum* a, uc_datum* b)
+{
+	double floata = uc_datum_repr_float(a);
+	double floatb = uc_datum_repr_float(b);
+	return uc_datum_from_float(floata * floatb);
+}
+
+/**
+ * Returns the division of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the division of the two float data
+ */
+static uc_datum* uc_datum_float_divide(uc_datum* a, uc_datum* b)
+{
+	double floata = uc_datum_repr_float(a);
+	double floatb = uc_datum_repr_float(b);
+	return uc_datum_from_float(floata / floatb);
+}
+
 
 /**
  * Returns a float representing the datum

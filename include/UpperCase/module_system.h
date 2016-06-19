@@ -32,7 +32,7 @@ void *uc_system_state(void);
 /**
  * state stack
  *
- * Handles stack commands like print and inspect
+ * Handles stack commands like inspect and clear
  */
 void *uc_stack_state(void);
 

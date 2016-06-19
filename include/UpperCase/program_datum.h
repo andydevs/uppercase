@@ -154,6 +154,36 @@ uc_datum* uc_datum_add(uc_datum* a, uc_datum* b);
  */
 uc_datum* uc_datum_subtract(uc_datum* a, uc_datum* b);
 
+/**
+ * Returns the multiplication of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the multiplication of te two given data
+ */
+uc_datum* uc_datum_multiply(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the division of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the division of te two given data
+ */
+uc_datum* uc_datum_divide(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the modulus of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the modulus of te two given data
+ */
+uc_datum* uc_datum_modulus(uc_datum* a, uc_datum* b);
+
 
 
 //------------------------------FUNCTIONS-------------------------------

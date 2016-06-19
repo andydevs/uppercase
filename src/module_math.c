@@ -36,6 +36,24 @@ void uc_add(void);
  */
 void uc_subtract(void);
 
+/**
+ * Multiplies the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_multiply(void);
+
+/**
+ * Divides the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_divide(void);
+
+/**
+ * Performs the modulus on the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_modulus(void);
+
 //----------------------------MATH STATE----------------------------
 
 /**
@@ -52,6 +70,15 @@ void *uc_math_state(void)
 			return (void*)&uc_main_state;
 		case 'S':
 			uc_subtract();
+			return (void*)&uc_main_state;
+		case 'T':
+			uc_multiply();
+			return (void*)&uc_main_state;
+		case 'D':
+			uc_divide();
+			return (void*)&uc_main_state;
+		case 'M':
+			uc_modulus();
 			return (void*)&uc_main_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> math");
@@ -85,6 +112,48 @@ void uc_subtract(void)
 	uc_datum* b = uc_stack_pop();
 	uc_datum* a = uc_stack_pop();
 	uc_datum* c = uc_datum_subtract(a, b);
+	uc_datum_destroy(a);
+	uc_datum_destroy(b);
+	uc_stack_push(c);
+}
+
+/**
+ * Multiplies the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_multiply(void)
+{
+	uc_datum* b = uc_stack_pop();
+	uc_datum* a = uc_stack_pop();
+	uc_datum* c = uc_datum_multiply(a, b);
+	uc_datum_destroy(a);
+	uc_datum_destroy(b);
+	uc_stack_push(c);
+}
+
+/**
+ * Divides the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_divide(void)
+{
+	uc_datum* b = uc_stack_pop();
+	uc_datum* a = uc_stack_pop();
+	uc_datum* c = uc_datum_divide(a, b);
+	uc_datum_destroy(a);
+	uc_datum_destroy(b);
+	uc_stack_push(c);
+}
+
+/**
+ * Performs the modulus on the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_modulus(void)
+{
+	uc_datum* b = uc_stack_pop();
+	uc_datum* a = uc_stack_pop();
+	uc_datum* c = uc_datum_modulus(a, b);
 	uc_datum_destroy(a);
 	uc_datum_destroy(b);
 	uc_stack_push(c);

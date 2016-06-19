@@ -65,24 +65,22 @@ void *uc_system_state(void)
 /**
  * state stack
  *
- * Handles stack commands like print and inspect
+ * Handles stack commands like inspect and clear
  */
 void *uc_stack_state(void)
 {
 	switch(uc_current_character())
 	{
-		case 'P':
-			uc_stack_print();
-			return &uc_main_state;
 		case 'I':
 			uc_stack_inspect();
 			return &uc_main_state;
+		case 'C':
+			uc_stack_clear();
+			return &uc_main_state;
 		default:
-			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system -> stack");
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system");
 	}
 }
-
-
 
 //----------------------------HELPER FUNCTIONS----------------------------
 
