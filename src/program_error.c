@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-#include "UpperCase/error.h"
+#include "UpperCase/program_error.h"
 #include "UpperCase/program_io.h"
 
 #include <stdio.h>

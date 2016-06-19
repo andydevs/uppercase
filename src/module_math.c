@@ -17,10 +17,10 @@
 //-----------------------------------------------------------------------
 
 #include "UpperCase/module_math.h"
-#include "UpperCase/state_machine.h"
+#include "UpperCase/program_state_machine.h"
 #include "UpperCase/program_io.h"
-#include "UpperCase/stack.h"
-#include "UpperCase/error.h"
+#include "UpperCase/program_stack.h"
+#include "UpperCase/program_error.h"
 
 //--------------------------HELPER HEADERS--------------------------
 

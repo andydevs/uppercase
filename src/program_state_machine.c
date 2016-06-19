@@ -16,10 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-#include "UpperCase/state_machine.h"
+#include "UpperCase/program_state_machine.h"
 #include "UpperCase/program_io.h"
-#include "UpperCase/error.h"
-#include "UpperCase/stack.h"
+#include "UpperCase/program_error.h"
+#include "UpperCase/program_stack.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,15 +31,16 @@
  *
  * @return true if the state machine ran unsuccessfully
  */
-int uc_run(void)
+int uc_state_machine_run(void)
 {
-	// Initialize stack and current state
+	// Initialize stack, current state, and current character
 	uc_stack_init();
 	uc_state uc_current_state = &uc_main_state;
+	uc_next_character();
 
 	// Run the state machine loop
-	// Untill current state is null or there are no more characters
-	while (uc_current_state != NULL && uc_next_character())
+	// While there are still more characters and states
+	while (uc_current_state != NULL && uc_continue())
 	{
 		// If an invalid character is spotted
 		if (uc_invalid_character())
@@ -56,6 +57,9 @@ int uc_run(void)
 
 		// Run the current state and retrieve the next state
 		uc_current_state = uc_current_state();
+
+		// Get next character
+		uc_next_character();
 	}
 
 	// Clear the stack

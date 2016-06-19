@@ -64,12 +64,20 @@ int uc_invalid_character()
 
 /**
  * Advances to the next character in the program file
+ */
+void uc_next_character()
+{
+	uc_current = fgetc(uc_program);
+}
+
+/**
+ * Returns true if the next character is not the end of file
  *
  * @return true if the next character is not the end of file
  */
-int uc_next_character()
+int uc_continue()
 {
-	return (uc_current = fgetc(uc_program)) != EOF;
+	return uc_current != EOF;
 }
 
 /**

@@ -34,7 +34,7 @@ typedef void *(*uc_state)(void);
  *
  * @return true if the state machine ran unsuccessfully
  */
-int uc_run(void);
+int uc_state_machine_run(void);
 
 /**
  * state main

@@ -52,10 +52,15 @@ int uc_invalid_character();
 
 /**
  * Advances to the next character in the program file
+ */
+void uc_next_character();
+
+/**
+ * Returns true if the next character is not the end of file
  *
  * @return true if the next character is not the end of file
  */
-int uc_next_character();
+int uc_continue();
 
 /**
  * Closes the program
