@@ -16,16 +16,28 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
+/**
+ * Headers being used
+ */
 #include "UpperCase/program_datum.h"
 
 /**
- * Headers being used
+ * Libraries being used
  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 //----------------------------HELPER HEADERS-----------------------------
+
+//--------------ALLOCATE-------------
+
+/**
+ * Allocates space for a uc_datum object
+ *
+ * @return pointer to allocated space
+ */
+static uc_datum* uc_datum_allocate();
 
 //--------------INSPECT--------------
 
@@ -72,7 +84,7 @@ static char* uc_datum_repr_string(uc_datum* a);
 static uc_datum* uc_datum_char_concat(uc_datum* a, uc_datum* b);
 
 
-//-----------INTEGER ADD-----------
+//-----------INTEGER OPERATIONS-----------
 
 /**
  * Returns the addition of the two integer data
@@ -80,9 +92,19 @@ static uc_datum* uc_datum_char_concat(uc_datum* a, uc_datum* b);
  * @param a the first integer datum
  * @param b the second integer datum
  *
- * @return the concatenation of the two integer data
+ * @return the addition of the two integer data
  */
 static uc_datum* uc_datum_integer_add(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the subtraction of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the subtraction of the two integer data
+ */
+static uc_datum* uc_datum_integer_subtract(uc_datum* a, uc_datum* b);
 
 /**
  * Returns a integer representing the datum
@@ -94,7 +116,7 @@ static uc_datum* uc_datum_integer_add(uc_datum* a, uc_datum* b);
 static int uc_datum_repr_integer(uc_datum* a);
 
 
-//-----------FLOAT ADD-----------
+//-----------FLOAT OPERATIONS-----------
 
 /**
  * Returns the addition of the two float data
@@ -102,9 +124,19 @@ static int uc_datum_repr_integer(uc_datum* a);
  * @param a the first float datum
  * @param b the second float datum
  *
- * @return the concatenation of the two float data
+ * @return the addition of the two float data
  */
 static uc_datum* uc_datum_float_add(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the subtraction of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the subtraction of the two float data
+ */
+static uc_datum* uc_datum_float_subtract(uc_datum* a, uc_datum* b);
 
 /**
  * Returns a float representing the datum
@@ -129,7 +161,7 @@ static double uc_datum_repr_float(uc_datum* a);
  */
 uc_datum *uc_datum_from_boolean(int value)
 {
-	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	uc_datum *d = uc_datum_allocate();
 	d->type = BOOLEAN;
 	d->value.boolean_value = value > 0;
 	return d;
@@ -144,7 +176,7 @@ uc_datum *uc_datum_from_boolean(int value)
  */
 uc_datum *uc_datum_from_float(double value)
 {
-	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	uc_datum *d = uc_datum_allocate();
 	d->type = FLOAT;
 	d->value.float_value = value;
 	return d;
@@ -159,7 +191,7 @@ uc_datum *uc_datum_from_float(double value)
  */
 uc_datum *uc_datum_from_char(char value)
 {
-	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	uc_datum *d = uc_datum_allocate();
 	d->type = CHAR;
 	d->value.char_value = value;
 	return d;
@@ -174,7 +206,7 @@ uc_datum *uc_datum_from_char(char value)
  */
 uc_datum *uc_datum_from_integer(int value)
 {
-	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	uc_datum *d = uc_datum_allocate();
 	d->type = INT;
 	d->value.integer_value = value;
 	return d;
@@ -189,7 +221,7 @@ uc_datum *uc_datum_from_integer(int value)
  */
 uc_datum *uc_datum_from_string(char *value)
 {	
-	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	uc_datum *d = uc_datum_allocate();
 	d->type = STRING;
 	d->value.string_value = value;
 	return d;
@@ -204,10 +236,22 @@ uc_datum *uc_datum_from_string(char *value)
  */
 uc_datum *uc_datum_from_const_string(const char *value)
 {
-	uc_datum *d = (uc_datum *)malloc(sizeof(uc_datum));
+	uc_datum *d = uc_datum_allocate();
 	d->type = STRING;
 	d->value.string_value = (char*)malloc(strlen(value));
 	strcpy(d->value.string_value, value);
+	return d;
+}
+
+/**
+ * Creates a new undefined uc_datum value
+ *
+ * @return a new undefined uc_datum value
+ */
+uc_datum *uc_datum_undefined()
+{
+	uc_datum *d = uc_datum_allocate();
+	d->type = UNDEFINED;
 	return d;
 }
 
@@ -225,7 +269,11 @@ uc_datum *uc_datum_from_const_string(const char *value)
  */
 uc_datum* uc_datum_add(uc_datum* a, uc_datum* b)
 {
-	if (a->type == STRING || b->type == STRING)
+	if (a->type == UNDEFINED || b->type == UNDEFINED)
+	{
+		return uc_datum_undefined();
+	}
+	else if (a->type == STRING || b->type == STRING)
 	{
 		return uc_datum_string_concat(a, b);
 	}
@@ -243,6 +291,30 @@ uc_datum* uc_datum_add(uc_datum* a, uc_datum* b)
 	}
 }
 
+/**
+ * Returns the subtraction of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the subtraction of te two given data
+ */
+uc_datum* uc_datum_subtract(uc_datum* a, uc_datum* b)
+{
+	if (a->type == UNDEFINED || b->type == UNDEFINED 
+		|| a->type == STRING || b->type == STRING)
+	{
+		return uc_datum_undefined();
+	}
+	else if (a->type == FLOAT || b->type == FLOAT)
+	{
+		return uc_datum_float_subtract(a, b);
+	}
+	else
+	{
+		return uc_datum_integer_subtract(a, b);
+	}
+}
 
 
 //------------------------------FUNCTIONS-------------------------------
@@ -270,6 +342,9 @@ void uc_datum_print(uc_datum *d)
 			return;
 		case INT:
 			printf("%d", d->value.integer_value);
+			return;
+		case UNDEFINED:
+			printf("undefined\n");
 			return;
 		default:
 			return;
@@ -307,6 +382,9 @@ void uc_datum_inspect(uc_datum *d)
 		case INT:
 			printf("int: %d", d->value.integer_value);
 			return;
+		case UNDEFINED:
+			printf("undefined\n");
+			return;
 		default:
 			printf("unknown type");
 			return;
@@ -334,6 +412,18 @@ void uc_datum_destroy(uc_datum *d)
 
 
 //---------------------------HELPER FUNCTIONS----------------------------
+
+//--------------ALLOCATE-------------
+
+/**
+ * Allocates space for a uc_datum object
+ *
+ * @return pointer to allocated space
+ */
+static uc_datum* uc_datum_allocate()
+{
+	return (uc_datum*)malloc(sizeof(uc_datum));
+}
 
 //--------------INSPECT--------------
 
@@ -429,7 +519,7 @@ static char* uc_datum_repr_string(uc_datum* d)
 			default:
 				break;
 		}
-		string = (char*)realloc(string, strlen(string));
+		string = (char*)realloc(string, strlen(string) + 1);
 	}
 	return string;
 }
@@ -455,7 +545,7 @@ static uc_datum* uc_datum_char_concat(uc_datum* a, uc_datum* b)
 }
 
 
-//-----------INTEGER ADD-----------
+//-----------INTEGER OPERATIONS-----------
 
 /**
  * Returns the addition of the two integer data
@@ -463,13 +553,28 @@ static uc_datum* uc_datum_char_concat(uc_datum* a, uc_datum* b)
  * @param a the first integer datum
  * @param b the second integer datum
  *
- * @return the concatenation of the two integer data
+ * @return the addition of the two integer data
  */
 static uc_datum* uc_datum_integer_add(uc_datum* a, uc_datum* b)
 {
 	int inta = uc_datum_repr_integer(a);
 	int intb = uc_datum_repr_integer(b);
 	return uc_datum_from_integer(inta + intb);
+}
+
+/**
+ * Returns the subtration of the two integer data
+ *
+ * @param a the first integer datum
+ * @param b the second integer datum
+ *
+ * @return the subtration of the two integer data
+ */
+static uc_datum* uc_datum_integer_subtract(uc_datum* a, uc_datum* b)
+{
+	int inta = uc_datum_repr_integer(a);
+	int intb = uc_datum_repr_integer(b);
+	return uc_datum_from_integer(inta - intb);
 }
 
 /**
@@ -497,7 +602,7 @@ static int uc_datum_repr_integer(uc_datum* a)
 }
 
 
-//-----------FLOAT ADD-----------
+//-----------FLOAT OPERATIONS-----------
 
 /**
  * Returns the addition of the two float data
@@ -505,13 +610,28 @@ static int uc_datum_repr_integer(uc_datum* a)
  * @param a the first float datum
  * @param b the second float datum
  *
- * @return the concatenation of the two float data
+ * @return the addition of the two float data
  */
 static uc_datum* uc_datum_float_add(uc_datum* a, uc_datum* b)
 {
-	double doublea = uc_datum_repr_float(a);
-	double doubleb = uc_datum_repr_float(b);
-	return uc_datum_from_float(doublea + doubleb);
+	double floata = uc_datum_repr_float(a);
+	double floatb = uc_datum_repr_float(b);
+	return uc_datum_from_float(floata + floatb);
+}
+
+/**
+ * Returns the subtraction of the two float data
+ *
+ * @param a the first float datum
+ * @param b the second float datum
+ *
+ * @return the subtraction of the two float data
+ */
+static uc_datum* uc_datum_float_subtract(uc_datum* a, uc_datum* b)
+{
+	double floata = uc_datum_repr_float(a);
+	double floatb = uc_datum_repr_float(b);
+	return uc_datum_from_float(floata - floatb);
 }
 
 /**

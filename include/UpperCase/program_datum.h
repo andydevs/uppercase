@@ -40,7 +40,8 @@ typedef enum
 	BOOLEAN,
 	FLOAT,
 	CHAR,
-	INT
+	INT,
+	UNDEFINED
 }
 uc_datum_type;
 
@@ -123,6 +124,12 @@ uc_datum *uc_datum_from_string(char *value);
  */
 uc_datum *uc_datum_from_const_string(const char *value);
 
+/**
+ * Creates a new undefined uc_datum value
+ *
+ * @return a new undefined uc_datum value
+ */
+uc_datum *uc_datum_undefined();
 
 
 //------------------------------FUNCTIONS-------------------------------
@@ -136,6 +143,16 @@ uc_datum *uc_datum_from_const_string(const char *value);
  * @return the addition of te two given data
  */
 uc_datum* uc_datum_add(uc_datum* a, uc_datum* b);
+
+/**
+ * Returns the subtraction of the two given data
+ *
+ * @param a the first datum
+ * @param b the second datum
+ *
+ * @return the subtraction of te two given data
+ */
+uc_datum* uc_datum_subtract(uc_datum* a, uc_datum* b);
 
 
 

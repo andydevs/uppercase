@@ -37,24 +37,25 @@ void *uc_throw_error(uc_error_type uc_err, const char* state_description)
 	{
 		case UC_INPUT_CHAR_INVALD:
 			printf("'%c' is invalid! Must be an uppercase letter!\n", uc_current_character());
-			return NULL;
+			break;
 		case UC_CHAR_NOT_FOUND:
 			printf("'%c' character not found!\n", uc_current_character());
-			return NULL;
+			break;
 		case UC_REGISTRY_MODULE_SLOT_FILLED:
 			printf("'%c' is already registered to another function!\n", uc_current_character());
-			return NULL;
+			break;
 		case UC_REGISTRY_MODULE_NOT_FOUND:
 			printf("'%c' Module not found in registry\n", uc_current_character());
-			return NULL;
+			break;
 		case UC_STACK_FULL:
 			printf("Stack is full!\n");
-			return NULL;
+			break;
 		case UC_CHAR_STACK_FULL:
 			printf("Char stack is full\n");
-			return NULL;
+			break;
 		default:
 			printf("Undefined error %i\n", uc_err);
-			return NULL;
+			break;
 	}
+	return NULL;
 }

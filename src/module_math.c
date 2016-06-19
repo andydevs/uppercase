@@ -30,6 +30,12 @@
  */
 void uc_add(void);
 
+/**
+ * Subtracts the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_subtract(void);
+
 //----------------------------MATH STATE----------------------------
 
 /**
@@ -43,6 +49,9 @@ void *uc_math_state(void)
 	{
 		case 'A':
 			uc_add();
+			return (void*)&uc_main_state;
+		case 'S':
+			uc_subtract();
 			return (void*)&uc_main_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> math");
@@ -62,6 +71,20 @@ void uc_add(void)
 	uc_datum* b = uc_stack_pop();
 	uc_datum* a = uc_stack_pop();
 	uc_datum* c = uc_datum_add(a, b);
+	uc_datum_destroy(a);
+	uc_datum_destroy(b);
+	uc_stack_push(c);
+}
+
+/**
+ * Subtracts the last two data on the stack together, 
+ * and pushes the result back onto the stack
+ */
+void uc_subtract(void)
+{
+	uc_datum* b = uc_stack_pop();
+	uc_datum* a = uc_stack_pop();
+	uc_datum* c = uc_datum_subtract(a, b);
 	uc_datum_destroy(a);
 	uc_datum_destroy(b);
 	uc_stack_push(c);

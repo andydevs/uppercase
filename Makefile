@@ -23,7 +23,7 @@ TESTFILE = tmp/testfile.u
 
 $(BINARY): $(OBJECTS)
 	@ test -d $(@D) || mkdir $(@D)
-	$(LINK) $? -o $@ $(LFLAGS) $(LIBRAR)
+	$(LINK) $^ -o $@ $(LFLAGS) $(LIBRAR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@ test -d $(@D) || mkdir $(@D)
