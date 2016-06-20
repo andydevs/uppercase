@@ -23,14 +23,17 @@ TESTFILE = tmp/testfile.u
 
 $(BINARY): $(OBJECTS)
 	@ test -d $(@D) || mkdir $(@D)
-	$(LINK) $^ -o $@ $(LFLAGS) $(LIBRAR)
+	@echo Building $@
+	@$(LINK) $^ -o $@ $(LFLAGS) $(LIBRAR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@ test -d $(@D) || mkdir $(@D)
-	$(COMPILE) $< -o $@ $(CFLAGS) $(INCLUD)
+	@echo Compiling $<
+	@$(COMPILE) $< -o $@ $(CFLAGS) $(INCLUD)
 
 clean:
-	rm -r $(OBJDIR) $(BINDIR)
+	@echo Cleanin up
+	@rm -r $(OBJDIR) $(BINDIR)
 
 install:
 	cp $(BINDIR)/$(TARGET) $(INSDIR)

@@ -20,6 +20,7 @@
 #include "UpperCase/program_io.h"
 #include "UpperCase/program_error.h"
 #include "UpperCase/program_stack.h"
+#include "UpperCase/program_vartable.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,10 +34,11 @@
  */
 int uc_state_machine_run(void)
 {
-	// Initialize stack, current state, and current character
+	// Initialize stack, vartable, current character, and current state
 	uc_stack_init();
-	uc_state uc_current_state = &uc_main_state;
+	uc_vartable_init();
 	uc_next_character();
+	uc_state uc_current_state = &uc_main_state;
 
 	// Run the state machine loop
 	// While there are still more characters and states
@@ -48,8 +50,9 @@ int uc_state_machine_run(void)
 			// Throw error
 			uc_throw_error(UC_INPUT_CHAR_INVALD, "[RUN]");
 
-			// Don't forget to clear the stack
+			// Don't forget to clear the stack and vartable
 			uc_stack_clear();
+			uc_vartable_clear();
 
 			// Return error
 			return 1;
@@ -64,6 +67,7 @@ int uc_state_machine_run(void)
 
 	// Clear the stack
 	uc_stack_clear();
+	uc_vartable_clear();
 
 	// Return program success
 	return 0;

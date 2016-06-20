@@ -41,6 +41,7 @@ typedef enum
 	FLOAT,
 	CHAR,
 	INT,
+	REFERENCE,
 	UNDEFINED
 }
 uc_datum_type;
@@ -51,11 +52,12 @@ uc_datum_type;
  * Defines the type of that data, and the value 
  * as a union of boolean, float, char, and integer
  */
-typedef struct
+typedef struct uc_datum_struct
 {
 	uc_datum_type type;
 	union
 	{
+		struct uc_datum_struct* reference_value;
 		char *string_value;
 		int boolean_value:2;
 		double float_value;
@@ -123,6 +125,15 @@ uc_datum *uc_datum_from_string(char *value);
  * @return a new string uc_datum value from the given value
  */
 uc_datum *uc_datum_from_const_string(const char *value);
+
+/**
+ * Creates a new reference uc_datum value from the given uc_datum
+ *
+ * @param value the reference value of the uc_datum
+ *
+ * @return a new reference uc_datum value from the given uc_datum
+ */
+uc_datum *uc_datum_from_reference(uc_datum *value);
 
 /**
  * Creates a new undefined uc_datum value

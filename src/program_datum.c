@@ -39,6 +39,15 @@
  */
 static uc_datum* uc_datum_allocate();
 
+//--------------GETTYPE-------------
+
+/**
+ * Allocates space for a uc_datum object
+ *
+ * @return pointer to allocated space
+ */
+static uc_datum_type uc_datum_raw_type(uc_datum* d);
+
 //--------------INSPECT--------------
 
 /**
@@ -294,6 +303,21 @@ uc_datum *uc_datum_from_const_string(const char *value)
 }
 
 /**
+ * Creates a new reference uc_datum value from the given uc_datum
+ *
+ * @param value the reference value of the uc_datum
+ *
+ * @return a new reference uc_datum value from the given uc_datum
+ */
+uc_datum *uc_datum_from_reference(uc_datum *value)
+{
+	uc_datum *d = uc_datum_allocate();
+	d->type = REFERENCE;
+	d->value.reference_value = value;
+	return d;
+}
+
+/**
  * Creates a new undefined uc_datum value
  *
  * @return a new undefined uc_datum value
@@ -319,19 +343,19 @@ uc_datum *uc_datum_undefined()
  */
 uc_datum* uc_datum_add(uc_datum* a, uc_datum* b)
 {
-	if (a->type == UNDEFINED || b->type == UNDEFINED)
+	if (uc_datum_raw_type(a) == UNDEFINED || uc_datum_raw_type(b) == UNDEFINED)
 	{
 		return uc_datum_undefined();
 	}
-	else if (a->type == STRING || b->type == STRING)
+	else if (uc_datum_raw_type(a) == STRING || uc_datum_raw_type(b) == STRING)
 	{
 		return uc_datum_string_concat(a, b);
 	}
-	else if (a->type == CHAR && b->type == CHAR)
+	else if (uc_datum_raw_type(a) == CHAR && uc_datum_raw_type(b) == CHAR)
 	{
 		return uc_datum_char_concat(a, b);
 	}
-	else if (a->type == FLOAT || b->type == FLOAT)
+	else if (uc_datum_raw_type(a) == FLOAT || uc_datum_raw_type(b) == FLOAT)
 	{
 		return uc_datum_float_add(a, b);
 	}
@@ -351,12 +375,12 @@ uc_datum* uc_datum_add(uc_datum* a, uc_datum* b)
  */
 uc_datum* uc_datum_subtract(uc_datum* a, uc_datum* b)
 {
-	if (a->type == UNDEFINED || b->type == UNDEFINED 
-		|| a->type == STRING || b->type == STRING)
+	if (uc_datum_raw_type(a) == UNDEFINED || uc_datum_raw_type(b) == UNDEFINED 
+		|| uc_datum_raw_type(a) == STRING || uc_datum_raw_type(b) == STRING)
 	{
 		return uc_datum_undefined();
 	}
-	else if (a->type == FLOAT || b->type == FLOAT)
+	else if (uc_datum_raw_type(a) == FLOAT || uc_datum_raw_type(b) == FLOAT)
 	{
 		return uc_datum_float_subtract(a, b);
 	}
@@ -376,12 +400,12 @@ uc_datum* uc_datum_subtract(uc_datum* a, uc_datum* b)
  */
 uc_datum* uc_datum_multiply(uc_datum* a, uc_datum* b)
 {
-	if (a->type == UNDEFINED || b->type == UNDEFINED 
-		|| a->type == STRING || b->type == STRING)
+	if (uc_datum_raw_type(a) == UNDEFINED || uc_datum_raw_type(b) == UNDEFINED 
+		|| uc_datum_raw_type(a) == STRING || uc_datum_raw_type(b) == STRING)
 	{
 		return uc_datum_undefined();
 	}
-	else if (a->type == FLOAT || b->type == FLOAT)
+	else if (uc_datum_raw_type(a) == FLOAT || uc_datum_raw_type(b) == FLOAT)
 	{
 		return uc_datum_float_multiply(a, b);
 	}
@@ -401,12 +425,12 @@ uc_datum* uc_datum_multiply(uc_datum* a, uc_datum* b)
  */
 uc_datum* uc_datum_divide(uc_datum* a, uc_datum* b)
 {
-	if (a->type == UNDEFINED || b->type == UNDEFINED 
-		|| a->type == STRING || b->type == STRING)
+	if (uc_datum_raw_type(a) == UNDEFINED || uc_datum_raw_type(b) == UNDEFINED 
+		|| uc_datum_raw_type(a) == STRING || uc_datum_raw_type(b) == STRING)
 	{
 		return uc_datum_undefined();
 	}
-	else if (a->type == FLOAT || b->type == FLOAT)
+	else if (uc_datum_raw_type(a) == FLOAT || uc_datum_raw_type(b) == FLOAT)
 	{
 		return uc_datum_float_divide(a, b);
 	}
@@ -426,9 +450,9 @@ uc_datum* uc_datum_divide(uc_datum* a, uc_datum* b)
  */
 uc_datum* uc_datum_modulus(uc_datum* a, uc_datum* b)
 {
-	if (a->type == UNDEFINED || b->type == UNDEFINED 
-		|| a->type == STRING || b->type == STRING
-		|| a->type == FLOAT || b->type == FLOAT)
+	if (uc_datum_raw_type(a) == UNDEFINED || uc_datum_raw_type(b) == UNDEFINED 
+		|| uc_datum_raw_type(a) == STRING || uc_datum_raw_type(b) == STRING
+		|| uc_datum_raw_type(a) == FLOAT || uc_datum_raw_type(b) == FLOAT)
 	{
 		return uc_datum_undefined();
 	}
@@ -464,6 +488,9 @@ void uc_datum_print(uc_datum *d)
 			return;
 		case INT:
 			printf("%d", d->value.integer_value);
+			return;
+		case REFERENCE:
+			uc_datum_print(d->value.reference_value);
 			return;
 		case UNDEFINED:
 			printf("undefined\n");
@@ -503,6 +530,10 @@ void uc_datum_inspect(uc_datum *d)
 			return;
 		case INT:
 			printf("int: %d", d->value.integer_value);
+			return;
+		case REFERENCE:
+			printf("&");
+			uc_datum_inspect(d->value.reference_value);
 			return;
 		case UNDEFINED:
 			printf("undefined\n");
@@ -545,6 +576,26 @@ void uc_datum_destroy(uc_datum *d)
 static uc_datum* uc_datum_allocate()
 {
 	return (uc_datum*)malloc(sizeof(uc_datum));
+}
+
+
+//--------------GETTYPE-------------
+
+/**
+ * Allocates space for a uc_datum object
+ *
+ * @return pointer to allocated space
+ */
+static uc_datum_type uc_datum_raw_type(uc_datum* d)
+{
+	if (d->type == REFERENCE)
+	{
+		return uc_datum_raw_type(d->value.reference_value);
+	}
+	else
+	{
+		return d->type;
+	}
 }
 
 //--------------INSPECT--------------
@@ -609,7 +660,11 @@ static uc_datum* uc_datum_string_concat(uc_datum* a, uc_datum* b)
 static char* uc_datum_repr_string(uc_datum* d)
 {
 	char* string;
-	if (d->type == CHAR || d->type == BOOLEAN)
+	if (d->type == REFERENCE)
+	{
+		return uc_datum_repr_string(d->value.reference_value);
+	}
+	else if (d->type == CHAR || d->type == BOOLEAN)
 	{
 		string = (char*)malloc(2);
 		string[1] = '\0';
@@ -622,6 +677,8 @@ static char* uc_datum_repr_string(uc_datum* d)
 		{
 			string[0] = d->value.char_value;
 		}
+
+		return string;
 	}
 	else
 	{
@@ -642,8 +699,9 @@ static char* uc_datum_repr_string(uc_datum* d)
 				break;
 		}
 		string = (char*)realloc(string, strlen(string) + 1);
+
+		return string;
 	}
-	return string;
 }
 
 
@@ -763,6 +821,8 @@ static int uc_datum_repr_integer(uc_datum* a)
 			return (int)a->value.char_value;
 		case INT:
 			return (int)a->value.integer_value;
+		case REFERENCE:
+			return uc_datum_repr_integer(a->value.reference_value);
 		default:
 			return 0;
 	}
@@ -851,6 +911,8 @@ static double uc_datum_repr_float(uc_datum* a)
 			return (double)a->value.char_value;
 		case INT:
 			return (double)a->value.integer_value;
+		case REFERENCE:
+			return uc_datum_repr_float(a->value.reference_value);
 		default:
 			return 0.0;
 	}

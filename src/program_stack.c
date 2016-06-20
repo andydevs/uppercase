@@ -151,9 +151,9 @@ void uc_stack_clear(void)
 	// Free all data in the uc_stack and set to null
 	for (int i = 0; i < UC_STACK_LENGTH; ++i)
 	{
-		if (((unsigned long)uc_stack[i]) > 0)
+		if (uc_stack[i] != NULL)
 		{
-			free(uc_stack[i]);
+			uc_datum_destroy(uc_stack[i]);
 		}
 	}
 

@@ -23,7 +23,7 @@
 #define _UC_STACK_H_
 
 /**
- * Uses the uc_datum
+ * Uses uc_datum
  */
 #include "UpperCase/program_datum.h"
 

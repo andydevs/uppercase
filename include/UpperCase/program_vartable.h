@@ -17,44 +17,54 @@
 //-----------------------------------------------------------------------
 
 /**
- * Handles system states
+ * Handles vartable code
  */
-#ifndef _UC_MODULE_SYSTEM_H_
-#define _UC_MODULE_SYSTEM_H_
+#ifndef _UC_PROGRAM_VARTABLE_H_
+#define _UC_PROGRAM_VARTABLE_H_
+
+/** 
+ * Uses uc_datum
+ */
+#include "UpperCase/program_datum.h"
+
+// Libraries being used
+#include <stdlib.h>
 
 /**
- * state system
- *
- * Handles system commands like print.
+ * The number of elements in the vartable
  */
-void *uc_system_state(void);
+#define UC_VARTABLE_LENGTH 26
 
 /**
- * state stack
- *
- * Handles stack commands like inspect and clear
+ * Initializes the vartable
  */
-void *uc_stack_state(void);
+void uc_vartable_init(void);
 
 /**
- * state variable
+ * Sets the given leter address of the vartable to the given uc_datum value
  *
- * Handles variable commands like get and set
+ * @param address the address (A to Z) to set
+ * @param value   the value being set at the address
  */
-void *uc_variable_state(void);
+void uc_vartable_set(char address, uc_datum* value);
 
 /**
- * state variable
+ * Gets the uc_datum value at the given letter address in the vartable
  *
- * Handles getting values from vartable
+ * @param address the address (A to Z) to get
+ *
+ * @return the value at the address
  */
-void *uc_variable_get_state(void);
+uc_datum* uc_vartable_get(char address);
 
 /**
- * state variable
- *
- * Handles setting values in vartable
+ * Prints a detailed description of the data stored in the vartable
  */
-void *uc_variable_set_state(void);
+void uc_vartable_inspect(void);
+
+/**
+ * Clears all of the data in the vartable
+ */
+void uc_vartable_clear(void);
 
 #endif

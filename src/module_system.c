@@ -21,6 +21,7 @@
 #include "UpperCase/program_io.h"
 #include "UpperCase/program_stack.h"
 #include "UpperCase/program_error.h"
+#include "UpperCase/program_vartable.h"
 
 #include <stdio.h>
 
@@ -35,8 +36,6 @@ static void uc_print(void);
  * Inspects the last datum on the stack, then destroys it
  */
 static void uc_inspect(void);
-
-
 
 //----------------------------STATE FUNCTIONS----------------------------
 
@@ -57,6 +56,8 @@ void *uc_system_state(void)
 			return &uc_main_state;
 		case 'S':
 			return &uc_stack_state;
+		case 'V':
+			return &uc_variable_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system");
 	}
@@ -78,8 +79,53 @@ void *uc_stack_state(void)
 			uc_stack_clear();
 			return &uc_main_state;
 		default:
-			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system");
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system -> stack");
 	}
+}
+
+/**
+ * state variable
+ *
+ * Handles variable commands like get and set
+ */
+void *uc_variable_state(void)
+{
+	switch(uc_current_character())
+	{
+		case 'S':
+			return &uc_variable_set_state;
+		case 'G':
+			return &uc_variable_get_state;
+		case 'I':
+			uc_vartable_inspect();
+			return &uc_main_state;
+		default:
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system -> variable");
+	}
+}
+
+/**
+ * state variable
+ *
+ * Handles getting values from vartable
+ */
+void *uc_variable_get_state(void)
+{
+	uc_datum *d = uc_vartable_get(uc_current_character());
+	uc_stack_push(d);
+	return &uc_main_state;
+}
+
+/**
+ * state variable
+ *
+ * Handles setting values in vartable
+ */
+void *uc_variable_set_state(void)
+{
+	uc_datum *d = uc_stack_pop();
+	uc_vartable_set(uc_current_character(), d);
+	return &uc_main_state;
 }
 
 //----------------------------HELPER FUNCTIONS----------------------------
