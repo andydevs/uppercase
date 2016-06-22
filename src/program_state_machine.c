@@ -16,11 +16,17 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
+// Program files being used
 #include "UpperCase/program_state_machine.h"
 #include "UpperCase/program_io.h"
 #include "UpperCase/program_error.h"
 #include "UpperCase/program_stack.h"
 #include "UpperCase/program_vartable.h"
+
+// Modules being used
+#include "UpperCase/module_data.h"
+#include "UpperCase/module_system.h"
+#include "UpperCase/module_math.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -74,59 +80,21 @@ int uc_state_machine_run(void)
 }
 
 /**
- * The main state of the program
+ * state main
+ *
  * This is where the state machine starts
  */
 void *uc_main_state(void)
 {
-	return (void*)uc_registry_get_module();
-}
-
-
-//---------------------------REGISTRY SYSTEM--------------------------
-
-/**
- * The registry used by the main state
- */
-static uc_state uc_main_registry[26];
-
-/**
- * Registers the given state function (representing a module) to the registry used by the main state
- * 
- * @param name the letter name to be used to call the function
- * @param function the function being set to the name
- *
- * @return status code indicating successful registration of module to letter
- */
-int uc_register_module(char name, uc_state function)
-{
-	if (!(name >= 'A' && name <= 'Z'))
+	switch(uc_current_character())
 	{
-		printf("REGISTRY ERROR: Invalid character slot: '%c'\n", name);
-		return 0;
+		case 'D':
+			return &uc_data_state;
+		case 'S':
+			return &uc_system_state;
+		case 'M':
+			return &uc_math_state;
+		default:
+			return uc_throw_error(UC_CHAR_NOT_FOUND, "main");
 	}
-
-	if (uc_main_registry[name - 'A'] != NULL)
-	{
-		printf("REGISTRY ERROR: Slot filled: '%c'\n", name);
-		return 0;
-	}
-
-	uc_main_registry[name - 'A'] = function;
-	return 1;
-}
-
-/**
- * Returns the module represented by the current character
- *
- * @return the module represented by the current character
- */
-uc_state uc_registry_get_module()
-{
-	if (uc_main_registry[uc_current_character() - 'A'] == NULL)
-	{
-		return uc_throw_error(UC_REGISTRY_MODULE_NOT_FOUND, "main");
-	}
-
-	return uc_main_registry[uc_current_character() - 'A'];
 }

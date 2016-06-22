@@ -43,24 +43,4 @@ int uc_state_machine_run(void);
  */
 void *uc_main_state(void);
 
-
-//----------------------------MODULE SYSTEM-----------------------------
-
-/**
- * Registers the given state function (representing a module) to the registry used by the main state
- * 
- * @param name the letter name to be used to call the function
- * @param function the function being set to the name
- *
- * @return status code indicating successful registration of module to letter
- */
-int uc_register_module(char name, uc_state function);
-
-/**
- * Returns the module represented by the current character
- *
- * @return the module represented by the current character
- */
-uc_state uc_registry_get_module();
-
 #endif

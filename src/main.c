@@ -15,15 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
+
 // Program files being used
 #include "UpperCase/program_io.h"
 #include "UpperCase/program_state_machine.h"
 #include "UpperCase/program_datum.h"
-
-// Modules being used
-#include "UpperCase/module_data.h"
-#include "UpperCase/module_system.h"
-#include "UpperCase/module_math.h"
 
 #include <stdio.h>
 
@@ -51,15 +47,8 @@ int main(int argc, char const *argv[])
 		return 1;
 	}
 
-	// Register modules
-	int allRegistered = 1;
-	allRegistered &= uc_register_module('D', &uc_data_state);
-	allRegistered &= uc_register_module('S', &uc_system_state);
-	allRegistered &= uc_register_module('M', &uc_math_state);
-
-	// Run program if all modules have been registrered
-	// Else, return status of 1
-	int status = allRegistered ? uc_state_machine_run() : 1;
+	// Run program
+	int status = uc_state_machine_run();
 
 	// Exit the program with status
 	uc_close_program();
