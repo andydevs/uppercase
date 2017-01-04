@@ -1,6 +1,6 @@
 # --------------------- PROJECT ----------------------
 
-PROJECT = jump
+PROJECT = uppercase
 
 # -------------------- DIRECTORIES -------------------
 
@@ -29,8 +29,10 @@ FLAGS = -std=c11 -Wall
 
 # ---------------------- MAKEFILE --------------------
 
+# File
 TARGET = $(PROJECT)
 
+# Directories
 INCLUDS = $(shell ls $(INCDIR)/**/*.h)
 SOURCES = $(shell ls $(SRCDIR)/**/*.c)
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))

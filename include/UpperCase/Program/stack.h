@@ -22,10 +22,8 @@
 #ifndef _UC_STACK_H_
 #define _UC_STACK_H_
 
-/**
- * Uses uc_datum
- */
-#include "UpperCase/program_datum.h"
+// Headers being used
+#include "datum.h"
 
 /**
  * The maximum number of values that can be added in the stack

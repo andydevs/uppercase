@@ -22,10 +22,8 @@
 #ifndef _UC_PROGRAM_VARTABLE_H_
 #define _UC_PROGRAM_VARTABLE_H_
 
-/** 
- * Uses uc_datum
- */
-#include "UpperCase/program_datum.h"
+// Headers being used
+#include "datum.h"
 
 // Libraries being used
 #include <stdlib.h>

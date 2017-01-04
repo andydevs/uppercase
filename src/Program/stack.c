@@ -16,11 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-#include "UpperCase/program_stack.h"
+// Headers being used
+#include "UpperCase/Program/stack.h"
 
-/**
- * Headers being used
- */
+// Headers being used
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -16,14 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-/**
- * Headers being used
- */
-#include "UpperCase/program_datum.h"
+// Headers being used
+#include "UpperCase/Program/datum.h"
 
-/**
- * Libraries being used
- */
+// Libraries being used
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

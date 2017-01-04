@@ -16,8 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-#include "UpperCase/program_io.h"
+// Headers being used
+#include "UpperCase/Program/io.h"
 
+// Libraries being used
 #include <stdio.h>
 
 /**
