@@ -1,0 +1,45 @@
+%YAML 1.2
+---
+name: UpperCase
+file_extensions: 
+  - u
+scope: source.uppercase
+
+contexts:
+  main:
+    - comment: Data
+      match: D
+      scope: keyword.control.uppercase
+      push: data
+
+    - comment: Math
+      match: M([A-Z])
+      captures:
+        0: keyword.control.uppercase
+        1: keyword.operator.uppercase
+
+    - comment: System
+      match: S((S|V)?[A-Z])
+      captures:
+        0: keyword.control.uppercase
+        1: keyword.operator.uppercase
+  data:
+    - comment: Strings
+      match: S(L?[A-Z][A-Z])+?E
+      scope: string.quoted.double.uppercase
+      pop: true
+
+    - comment: Characters
+      match: CL?[A-Z][A-Z]
+      scope: string.quoted.single.uppercase
+      pop: true
+
+    - comment: Numbers
+      match: (I|F)[A-Z]+?E
+      scope: constant.numeric.uppercase
+      pop: true
+
+    - comment: Boolean
+      match: B(T|F)
+      scope: constant.language.uppercase
+      pop: true
