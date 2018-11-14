@@ -17,9 +17,9 @@
 //-----------------------------------------------------------------------
 
 // Program files being used
-#include "UpperCase/Program/io.h"
-#include "UpperCase/Program/state_machine.h"
-#include "UpperCase/Program/datum.h"
+#include "UpperCase/io.h"
+#include "UpperCase/state_machine.h"
+#include "UpperCase/datum.h"
 
 #include <stdio.h>
 

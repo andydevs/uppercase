@@ -16,11 +16,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-#include "UpperCase/Module/data.h"
-#include "UpperCase/Program/state_machine.h"
-#include "UpperCase/Program/io.h"
-#include "UpperCase/Program/stack.h"
-#include "UpperCase/Program/error.h"
+#include "UpperCase/data.h"
+#include "UpperCase/state_machine.h"
+#include "UpperCase/io.h"
+#include "UpperCase/stack.h"
+#include "UpperCase/error.h"
 
 //----------------------------HELPER HEADERS-----------------------------
 
