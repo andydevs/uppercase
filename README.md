@@ -12,18 +12,18 @@ Yes, it's that bad.
 
 ## Table of Contents
 
-* [Syntax](##-Syntax)
-	* [Hello World Code](###-Hello-World-Code)
-	* [Defining Data](###-Defining-Data)
-		* [Booleans](####-Booleans)
-		* [Characters](####-Characters)
-		* [Strings](####-Strings)
-		* [Integers](####-Integers)
-		* [Floats](####-Floats)
-	* [System Operations](###-System-Operations)
-		* [Stack Operations](####-Stack-Operations)
-		* [Vartable Operations](####-Vartable-Operations)
-	* [Math Operations](###-Math-Operations)
+* [Syntax](#syntax)
+	* [Hello World Code](#hello-world-code)
+	* [Defining Data](#defining-data)
+		* [Booleans](#booleans)
+		* [Characters](#characters)
+		* [Strings](#strings)
+		* [Integers](#integers)
+		* [Floats](#floats)
+	* [System Operations](#system-operations)
+		* [Stack Operations](#stack-operations)
+		* [Vartable Operations](#vartable-operations)
+	* [Math Operations](#math-operations)
 
 ## Syntax
 
