@@ -3,6 +3,11 @@
 - Change build system to Cmake [DONE]
 	- Move files outside of folders in src and include [DONE]
 	- Create CMakeLists.txt with include folder and src folder [DONE]
+	- Move source files under a single build subdirectory named Uppercase
+		- Move include/UpperCase to UpperCase/include
+		- Move src to UpperCase/src
+			- Remove CMakeLists.txt from src
+		- Make new CMakeLists.txt in UpperCase root
 - Update interfaces to return and require data types for each parts of the program rather than use static variables
 	- File
 	- Stack
