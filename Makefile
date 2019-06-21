@@ -14,7 +14,7 @@ INSDIR = /usr/bin
 # ----------------------- TEST -----------------------
 
 # Program arguments
-TESTARGS = tmp/testfile.u
+TESTARGS = testfile.u
 
 # ---------------------- CONFIG ----------------------
 

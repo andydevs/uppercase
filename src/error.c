@@ -17,8 +17,8 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
-#include "UpperCase/error.h"
-#include "UpperCase/io.h"
+#include "error.h"
+#include "io.h"
 
 // Libraries being used
 #include <stdio.h>

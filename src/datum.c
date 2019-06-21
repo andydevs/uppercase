@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
-#include "UpperCase/datum.h"
+#include "datum.h"
 
 // Libraries being used
 #include <stdio.h>
