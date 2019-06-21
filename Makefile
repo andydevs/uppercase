@@ -1,56 +1,23 @@
-# --------------------- PROJECT ----------------------
+TARGET=uppercase
+INCLUDS=$(shell ls *.h)
+SOURCES=$(shell ls *.c)
+OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
+FLAGS=-g -std=c11 -Wall
 
-PROJECT = uppercase
-
-# -------------------- DIRECTORIES -------------------
-
-LIBDIR = lib
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
-INSDIR = /usr/bin
-
-# ----------------------- TEST -----------------------
-
-# Program arguments
-TESTARGS = testfile.u
-
-# ---------------------- CONFIG ----------------------
-
-# Shell command
-SHELL = /bin/bash -O globstar
-
-# Compiler
-CC = gcc
-
-# Flags
-FLAGS = -std=c11 -Wall
-
-# ---------------------- MAKEFILE --------------------
-
-# File
-TARGET = $(PROJECT)
-
-# Directories
-INCLUDS = $(shell ls *.h)
-SOURCES = $(shell ls *.c)
-OBJECTS = $(patsubst %.c,%.o, $(SOURCES))
-
-$(TARGET): $(OBJECTS)
-	$(CC) $^ -o $@ $(FLAGS) 
+uppercase: $(OBJECTS)
+	gcc $^ -o $@ $(FLAGS) 
 
 %.o: %.c
-	$(CC) -c -o $@ $^ $(FLAGS)
+	gcc -c -o $@ $^ $(FLAGS)
 
 clean:
-	rm -f -r $(TARGET) $(OBJECTS) 
-	rm -f $(TARGET).exe.stackdump
+	rm -f uppercase *.o
 
-install: $(BINARY)
-	cp $(TARGET) $(INSDIR)
+install: uppercase
+	cp uppercase /usr/bin 
 
 uninstall:
-	rm $(INSDIR)/$(TARGET)
+	rm /usr/bin/uppercase
 
-run: $(TARGET)
-	./$(TARGET) $(TESTARGS)
+run: uppercase
+	./uppercase testfile.u
