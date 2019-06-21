@@ -4,7 +4,6 @@ PROJECT = uppercase
 
 # -------------------- DIRECTORIES -------------------
 
-INCDIR = include
 LIBDIR = lib
 SRCDIR = src
 OBJDIR = obj
@@ -33,43 +32,25 @@ FLAGS = -std=c11 -Wall
 TARGET = $(PROJECT)
 
 # Directories
-INCLUDS = $(shell ls $(INCDIR)/**/*.h)
-SOURCES = $(shell ls $(SRCDIR)/**/*.c)
-OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
-BINARY  = $(BINDIR)/$(TARGET)
+INCLUDS = $(shell ls *.h)
+SOURCES = $(shell ls *.c)
+OBJECTS = $(patsubst %.c,%.o, $(SOURCES))
 
-$(BINARY): $(LIBRARY) $(OBJECTS)
-	@echo building $@
-	@test -d $(@D) || mkdir -p $(@D)
-	@$(CC) $^ -o $@ $(FLAGS) -L $(LIBDIR)
+$(TARGET): $(OBJECTS)
+	$(CC) $^ -o $@ $(FLAGS) 
 
-$(LIBDIR)/$(LIBRARY): $(LIBCOMPS)
-	@echo linking library
-	@test -d $(@D) || mkdir -p $(@D)
-	@$(CC) -shared $^ -o $@ $(FLAGS)
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCLUDS)
-	@echo compiling $<
-	@test -d $(@D) || mkdir -p $(@D)
-	@$(CC) -c $< -o $@ $(FLAGS) -I $(INCDIR)
+%.o: %.c
+	$(CC) -c -o $@ $^ $(FLAGS)
 
 clean:
-	@echo Cleaning up...
-	@rm -f -r $(OBJDIR) $(BINDIR)
-	@rm -f $(TARGET).exe.stackdump
+	rm -f -r $(TARGET) $(OBJECTS) 
+	rm -f $(TARGET).exe.stackdump
 
 install: $(BINARY)
-	@echo Installing...
-	@cp $(BINARY) $(INSDIR)
-	@echo Installed!
+	cp $(TARGET) $(INSDIR)
 
 uninstall:
-	@echo Uninstalling...
-	@rm $(INSDIR)/$(TARGET)
-	@echo Uninstalled!
+	rm $(INSDIR)/$(TARGET)
 
-run: $(BINARY)
-	@echo Running...
-	@echo -----------------------------------------
-	@$(BINARY) $(TESTARGS)
-	@echo -----------------------------------------
+run: $(TARGET)
+	./$(TARGET) $(TESTARGS)
