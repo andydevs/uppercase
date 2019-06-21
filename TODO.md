@@ -1,19 +1,13 @@
 # TODO
 
-- Change build system to Cmake [DONE]
-	- Move files outside of folders in src and include [DONE]
-	- Create CMakeLists.txt with include folder and src folder [DONE]
-	- Move source files under a single build subdirectory named Uppercase
-		- Move include/UpperCase to UpperCase/include
-		- Move src to UpperCase/src
-			- Remove CMakeLists.txt from src
-		- Make new CMakeLists.txt in UpperCase root
+- Separate code into executables and libraries
+	- Split Uppercase "Modules" and "Program" to separate libraries
 - Update interfaces to return and require data types for each parts of the program rather than use static variables
 	- File
 	- Stack
 		- Datum stack
 		- Character stack
 	- Vartable
-	- Change state functions to require file, datum stack, char stack, and vartable
-- Separate code into executables and libraries
-	- Split Uppercase "Modules" and "Program" to separate libraries
+	- Create uppercase program which contains file, datum stack, character stack, and vartable
+	- Change state functions to require uppercase program
+
