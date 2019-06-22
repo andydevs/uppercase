@@ -1,10 +1,6 @@
-TARGET=uppercase
-INCLUDS=$(shell ls *.h)
-SOURCES=$(shell ls *.c)
-OBJECTS=$(patsubst %.c,%.o,$(SOURCES))
 FLAGS=-g -std=c11 -Wall
 
-uppercase: $(OBJECTS)
+uppercase: uppercase.o data.o datum.o error.o io.o math.o stack.o state_machine.o system.o vartable.o
 	gcc $^ -o $@ $(FLAGS) 
 
 %.o: %.c
@@ -21,3 +17,4 @@ uninstall:
 
 run: uppercase
 	./uppercase testfile.u
+
