@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------
 
 #include "math.h"
-#include "state_machine.h"
+#include "statemachine.h"
 #include "io.h"
 #include "stack.h"
 #include "error.h"

@@ -3,7 +3,7 @@ CFLAGS=-g -std=c11 -Wall
 
 .PHONY: clean install uninstall run
 
-uppercase: uppercase.o data.o datum.o error.o io.o math.o stack.o state_machine.o system.o vartable.o
+uppercase: uppercase.o data.o datum.o error.o io.o math.o stack.o statemachine.o system.o vartable.o
 
 clean:
 	rm -f uppercase *.o

@@ -18,7 +18,7 @@
 
 // Program files being used
 #include "io.h"
-#include "state_machine.h"
+#include "statemachine.h"
 #include "datum.h"
 
 #include <stdio.h>
