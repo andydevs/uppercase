@@ -1,12 +1,13 @@
 CC=gcc
-CFLAGS=-g -std=c11 -Wall
+CFLAGS=-g -std=c11 -Wall -Iprogram -Imodules
 
 .PHONY: clean install uninstall run
 
-uppercase: uppercase.o data.o datum.o error.o io.o math.o stack.o statemachine.o system.o vartable.o
+uppercase: program/uppercase.o program/stack.o program/statemachine.o program/vartable.o program/datum.o program/error.o program/io.o modules/math.o modules/system.o modules/data.o
+	$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 clean:
-	rm -f uppercase *.o
+	rm -f uppercase **/*.o
 
 install: uppercase
 	cp uppercase /usr/bin 
