@@ -18,7 +18,7 @@
 
 // Headers being used
 #include "error.h"
-#include "io.h"
+#include "program.h"
 
 // Libraries being used
 #include <stdio.h>

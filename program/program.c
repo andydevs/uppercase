@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
-#include "io.h"
+#include "program.h"
 
 // Libraries being used
 #include <stdio.h>

@@ -17,9 +17,8 @@
 //-----------------------------------------------------------------------
 
 // Program files being used
-#include "io.h"
+#include "program.h"
 #include "statemachine.h"
-#include "datum.h"
 
 #include <stdio.h>
 
@@ -50,7 +49,9 @@ int main(int argc, char const *argv[])
 	// Run program
 	int status = uc_state_machine_run();
 
-	// Exit the program with status
+	// Close program 
 	uc_close_program();
+	
+	// Exit status
 	return status;
 }

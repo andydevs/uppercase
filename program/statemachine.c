@@ -18,7 +18,7 @@
 
 // Program files being used
 #include "statemachine.h"
-#include "io.h"
+#include "program.h"
 #include "error.h"
 #include "stack.h"
 #include "vartable.h"
