@@ -43,6 +43,7 @@ int uc_state_machine_run(void)
 {
 	// Initialize stack, vartable, current character, and current state
 	uc_datum_stack_init();
+	uc_char_stack_init();
 	uc_vartable_init();
 	uc_next_character();
 	uc_state uc_current_state = &uc_main_state;

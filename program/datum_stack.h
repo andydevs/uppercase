@@ -19,11 +19,51 @@
 /**
  * Handles the stack
  */
-#ifndef _UC_STACK_H_
-#define _UC_STACK_H_
+#ifndef _UC_DATUM_STACK_H_
+#define _UC_DATUM_STACK_H_
 
-// Include datum and char stack
-#include "datum_stack.h"
-#include "char_stack.h"
+// Headers being used
+#include "datum.h"
+
+/**
+ * The maximum number of values that can be added in the stack
+ */
+#define UC_STACK_LENGTH 1024
+
+/**
+ * Initializes the stack
+ */
+void uc_datum_stack_init(void);
+
+/**
+ * Adds a datum to the stack
+ *
+ * @param d the data to add to the stack
+ *
+ * @return true if data was successfully added
+ */
+int uc_datum_stack_push(uc_datum *d);
+
+/**
+ * Removes the last datum added to the stack and returns it
+ *
+ * @return the last datum added to the stack
+ */
+uc_datum *uc_datum_stack_pop(void);
+
+/**
+ * Prints the entire stack
+ */
+void uc_datum_stack_print(void);
+
+/**
+ * Prints a detailed description of the data in the stack
+ */
+void uc_datum_stack_inspect(void);
+
+/**
+ * Clears all of the data from the stack
+ */
+void uc_datum_stack_clear(void);
 
 #endif
