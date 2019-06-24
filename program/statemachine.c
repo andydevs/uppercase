@@ -42,7 +42,7 @@
 int uc_state_machine_run(void)
 {
 	// Initialize stack, vartable, current character, and current state
-	uc_stack_init();
+	uc_datum_stack_init();
 	uc_vartable_init();
 	uc_next_character();
 	uc_state uc_current_state = &uc_main_state;
@@ -58,7 +58,7 @@ int uc_state_machine_run(void)
 			uc_throw_error(UC_INPUT_CHAR_INVALD, "[RUN]");
 
 			// Don't forget to clear the stack and vartable
-			uc_stack_clear();
+			uc_datum_stack_clear();
 			uc_vartable_clear();
 
 			// Return error
@@ -73,7 +73,7 @@ int uc_state_machine_run(void)
 	}
 
 	// Clear the stack
-	uc_stack_clear();
+	uc_datum_stack_clear();
 	uc_vartable_clear();
 
 	// Return program success

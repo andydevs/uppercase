@@ -40,7 +40,7 @@
 /**
  * Initializes the stack
  */
-void uc_stack_init(void);
+void uc_datum_stack_init(void);
 
 /**
  * Adds a datum to the stack
@@ -49,29 +49,29 @@ void uc_stack_init(void);
  *
  * @return true if data was successfully added
  */
-int uc_stack_push(uc_datum *d);
+int uc_datum_stack_push(uc_datum *d);
 
 /**
  * Removes the last datum added to the stack and returns it
  *
  * @return the last datum added to the stack
  */
-uc_datum *uc_stack_pop(void);
+uc_datum *uc_datum_stack_pop(void);
 
 /**
  * Prints the entire stack
  */
-void uc_stack_print(void);
+void uc_datum_stack_print(void);
 
 /**
  * Prints a detailed description of the data in the stack
  */
-void uc_stack_inspect(void);
+void uc_datum_stack_inspect(void);
 
 /**
  * Clears all of the data from the stack
  */
-void uc_stack_clear(void);
+void uc_datum_stack_clear(void);
 
 
 

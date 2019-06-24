@@ -311,10 +311,10 @@ void *uc_boolean_state(void)
 	switch(uc_current_character())
 	{
 		case 'T':
-			uc_stack_push(uc_datum_from_boolean(1));
+			uc_datum_stack_push(uc_datum_from_boolean(1));
 			return (void*)&uc_main_state;
 		case 'F':
-			uc_stack_push(uc_datum_from_boolean(0));
+			uc_datum_stack_push(uc_datum_from_boolean(0));
 			return (void*)&uc_main_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> data -> boolean");
@@ -548,7 +548,7 @@ static void* uc_end_long_data(uc_datum_type type, const char* state_description)
 			default:
 				break;
 		}
-		if (uc_stack_push(d))
+		if (uc_datum_stack_push(d))
 		{
 			return (void*)&uc_main_state;
 		}
@@ -579,7 +579,7 @@ static void* uc_add_character_data(char c, void* next_state, const char* state_d
 	{
 		return uc_throw_error(UC_CHAR_NOT_FOUND, state_description);
 	}
-	else if (uc_stack_push(uc_datum_from_char(c)))
+	else if (uc_datum_stack_push(uc_datum_from_char(c)))
 	{
 		return next_state;
 	}

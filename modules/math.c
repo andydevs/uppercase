@@ -95,12 +95,12 @@ void *uc_math_state(void)
  */
 void uc_add(void)
 {
-	uc_datum* b = uc_stack_pop();
-	uc_datum* a = uc_stack_pop();
+	uc_datum* b = uc_datum_stack_pop();
+	uc_datum* a = uc_datum_stack_pop();
 	uc_datum* c = uc_datum_add(a, b);
 	uc_datum_destroy(a);
 	uc_datum_destroy(b);
-	uc_stack_push(c);
+	uc_datum_stack_push(c);
 }
 
 /**
@@ -109,12 +109,12 @@ void uc_add(void)
  */
 void uc_subtract(void)
 {
-	uc_datum* b = uc_stack_pop();
-	uc_datum* a = uc_stack_pop();
+	uc_datum* b = uc_datum_stack_pop();
+	uc_datum* a = uc_datum_stack_pop();
 	uc_datum* c = uc_datum_subtract(a, b);
 	uc_datum_destroy(a);
 	uc_datum_destroy(b);
-	uc_stack_push(c);
+	uc_datum_stack_push(c);
 }
 
 /**
@@ -123,12 +123,12 @@ void uc_subtract(void)
  */
 void uc_multiply(void)
 {
-	uc_datum* b = uc_stack_pop();
-	uc_datum* a = uc_stack_pop();
+	uc_datum* b = uc_datum_stack_pop();
+	uc_datum* a = uc_datum_stack_pop();
 	uc_datum* c = uc_datum_multiply(a, b);
 	uc_datum_destroy(a);
 	uc_datum_destroy(b);
-	uc_stack_push(c);
+	uc_datum_stack_push(c);
 }
 
 /**
@@ -137,12 +137,12 @@ void uc_multiply(void)
  */
 void uc_divide(void)
 {
-	uc_datum* b = uc_stack_pop();
-	uc_datum* a = uc_stack_pop();
+	uc_datum* b = uc_datum_stack_pop();
+	uc_datum* a = uc_datum_stack_pop();
 	uc_datum* c = uc_datum_divide(a, b);
 	uc_datum_destroy(a);
 	uc_datum_destroy(b);
-	uc_stack_push(c);
+	uc_datum_stack_push(c);
 }
 
 /**
@@ -151,10 +151,10 @@ void uc_divide(void)
  */
 void uc_modulus(void)
 {
-	uc_datum* b = uc_stack_pop();
-	uc_datum* a = uc_stack_pop();
+	uc_datum* b = uc_datum_stack_pop();
+	uc_datum* a = uc_datum_stack_pop();
 	uc_datum* c = uc_datum_modulus(a, b);
 	uc_datum_destroy(a);
 	uc_datum_destroy(b);
-	uc_stack_push(c);
+	uc_datum_stack_push(c);
 }

@@ -53,7 +53,7 @@ static int uc_char_stack_cursor;
 /**
  * Initializes the uc_stack
  */
-void uc_stack_init(void)
+void uc_datum_stack_init(void)
 {
 	// Set all data in the uc_stack to null
 	for (int i = 0; i < UC_STACK_LENGTH; ++i)
@@ -77,7 +77,7 @@ void uc_stack_init(void)
  *
  * @param d the data to add
  */
-int uc_stack_push(uc_datum *d)
+int uc_datum_stack_push(uc_datum *d)
 {
 	// Add the data if the uc_stack is not full, and return True
 	// Else, return false
@@ -98,7 +98,7 @@ int uc_stack_push(uc_datum *d)
  *
  * @return the last uc_datum added to the uc_stack
  */
-uc_datum* uc_stack_pop(void)
+uc_datum* uc_datum_stack_pop(void)
 {
 	// Remove data from uc_stack and return it if there is any
 	// Else return NULL
@@ -118,7 +118,7 @@ uc_datum* uc_stack_pop(void)
 /**
  * Prints the entire uc_stack
  */
-void uc_stack_print(void)
+void uc_datum_stack_print(void)
 {
 	// Print all of the data stored in the uc_stack
 	for (int i = 0; i < uc_stack_cursor; ++i)
@@ -130,7 +130,7 @@ void uc_stack_print(void)
 /**
  * Prints a detailed description of the data in the stack
  */
-void uc_stack_inspect(void)
+void uc_datum_stack_inspect(void)
 {
 	printf("Stack has %d items:\n", uc_stack_cursor);
 	// Print all of the data stored in the uc_stack
@@ -145,7 +145,7 @@ void uc_stack_inspect(void)
 /**
  * Clears all of the data from the uc_stack
  */
-void uc_stack_clear(void)
+void uc_datum_stack_clear(void)
 {
 	// Free all data in the uc_stack and set to null
 	for (int i = 0; i < UC_STACK_LENGTH; ++i)

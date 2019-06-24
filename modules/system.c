@@ -73,10 +73,10 @@ void *uc_stack_state(void)
 	switch(uc_current_character())
 	{
 		case 'I':
-			uc_stack_inspect();
+			uc_datum_stack_inspect();
 			return &uc_main_state;
 		case 'C':
-			uc_stack_clear();
+			uc_datum_stack_clear();
 			return &uc_main_state;
 		default:
 			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> system -> stack");
@@ -112,7 +112,7 @@ void *uc_variable_state(void)
 void *uc_variable_get_state(void)
 {
 	uc_datum *d = uc_vartable_get(uc_current_character());
-	uc_stack_push(d);
+	uc_datum_stack_push(d);
 	return &uc_main_state;
 }
 
@@ -123,7 +123,7 @@ void *uc_variable_get_state(void)
  */
 void *uc_variable_set_state(void)
 {
-	uc_datum *d = uc_stack_pop();
+	uc_datum *d = uc_datum_stack_pop();
 	uc_vartable_set(uc_current_character(), d);
 	return &uc_main_state;
 }
@@ -135,7 +135,7 @@ void *uc_variable_set_state(void)
  */
 static void uc_print(void)
 {
-	uc_datum *d = uc_stack_pop();
+	uc_datum *d = uc_datum_stack_pop();
 	uc_datum_print(d);
 	uc_datum_destroy(d);
 }
@@ -145,7 +145,7 @@ static void uc_print(void)
  */
 static void uc_inspect(void)
 {
-	uc_datum *d = uc_stack_pop();
+	uc_datum *d = uc_datum_stack_pop();
 	uc_datum_inspect(d);
 	uc_datum_destroy(d);
 	printf("\n");
