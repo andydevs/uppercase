@@ -19,7 +19,8 @@
 #include "system.h"
 #include "statemachine.h"
 #include "program.h"
-#include "stack.h"
+#include "datum_stack.h"
+#include "char_stack.h"
 #include "error.h"
 #include "vartable.h"
 

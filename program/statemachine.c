@@ -20,7 +20,8 @@
 #include "statemachine.h"
 #include "program.h"
 #include "error.h"
-#include "stack.h"
+#include "char_stack.h"
+#include "datum_stack.h"
 #include "vartable.h"
 
 // Modules being used

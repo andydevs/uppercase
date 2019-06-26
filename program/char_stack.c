@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
-#include "stack.h"
+#include "char_stack.h"
 
 // Headers being used
 #include <stdio.h>
