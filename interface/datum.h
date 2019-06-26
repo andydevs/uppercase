@@ -69,7 +69,6 @@ typedef struct uc_datum_struct
 uc_datum;
 
 
-
 //-----------------------------CONSTRUCTORS-----------------------------
 
 /**
@@ -143,7 +142,7 @@ uc_datum *uc_datum_from_reference(uc_datum *value);
 uc_datum *uc_datum_undefined();
 
 
-//------------------------------FUNCTIONS-------------------------------
+//------------------------------OPERATIONS-------------------------------
 
 /**
  * Returns the addition of the two given data
@@ -196,7 +195,6 @@ uc_datum* uc_datum_divide(uc_datum* a, uc_datum* b);
 uc_datum* uc_datum_modulus(uc_datum* a, uc_datum* b);
 
 
-
 //------------------------------FUNCTIONS-------------------------------
 
 /**
@@ -212,7 +210,6 @@ void uc_datum_print(uc_datum *d);
  * @param d the datum being inspected
  */
 void uc_datum_inspect(uc_datum *d);
-
 
 
 //------------------------------DESTRUCTOR-------------------------------

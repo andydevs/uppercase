@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -std=c11 -Wall -Iprogram -Imodules
+CFLAGS=-g -std=c11 -Wall -Iinterface -Imodules
 
 .PHONY: clean install uninstall run
 
