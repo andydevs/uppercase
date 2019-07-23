@@ -1,5 +1,5 @@
 CC=gcc
-INCDIRS=-I../interface -I../math -I../system
+INCDIRS=-I../uppercase -I../math -I../system
 CFLAGS=-g -std=c11 -Wall $(INCDIRS)
 
 libdata.a: data.o
