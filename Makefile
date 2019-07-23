@@ -1,20 +1,23 @@
-CC=gcc
-CFLAGS=-g -std=c11 -Wall -Iinterface -Imodules
+.PHONY: clean run install uninstall
 
-.PHONY: clean install uninstall run
+program/uppercase: math/libmath.a data/libdata.a system/libsystem.a
+	$(MAKE) -C program uppercase
 
-uppercase: program/uppercase.o program/datum_stack.o program/char_stack.o program/statemachine.o program/vartable.o program/datum.o program/error.o program/program.o modules/math.o modules/system.o modules/data.o
-	$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+math/libmath.a:
+	$(MAKE) -C math libmath.a
+
+data/libdata.a:
+	$(MAKE) -C data libdata.a
+	
+system/libsystem.a:
+	$(MAKE) -C system libsystem.a
 
 clean:
-	rm -f uppercase **/*.o
+	$(MAKE) -C program clean
+	$(MAKE) -C math clean
+	$(MAKE) -C data clean
+	$(MAKE) -C system clean
 
-install: uppercase
-	cp uppercase /usr/bin 
-
-uninstall:
-	rm /usr/bin/uppercase
-
-run: uppercase
-	./uppercase testfile.u
+run: program/uppercase
+	program/uppercase testfile.u
 
