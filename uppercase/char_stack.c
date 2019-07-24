@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
-#include "char_stack.h"
+#include "uppercase/char_stack.h"
 
 // Headers being used
 #include <stdio.h>

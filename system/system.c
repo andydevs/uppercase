@@ -16,13 +16,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-#include "system.h"
-#include "statemachine.h"
-#include "program.h"
-#include "datum_stack.h"
-#include "char_stack.h"
-#include "error.h"
-#include "vartable.h"
+#include "system/system.h"
+#include "uppercase/statemachine.h"
+#include "uppercase/program.h"
+#include "uppercase/datum_stack.h"
+#include "uppercase/char_stack.h"
+#include "uppercase/error.h"
+#include "uppercase/vartable.h"
 
 #include <stdio.h>
 

@@ -23,7 +23,7 @@
 #define _UC_CHAR_STACK_H_
 
 // Headers being used
-#include "datum.h"
+#include "uppercase/datum.h"
 
 /**
  * The maximum number of characters that can be added into the char stack

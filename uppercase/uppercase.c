@@ -17,8 +17,8 @@
 //-----------------------------------------------------------------------
 
 // Program files being used
-#include "program.h"
-#include "statemachine.h"
+#include "uppercase/program.h"
+#include "uppercase/statemachine.h"
 
 #include <stdio.h>
 

@@ -1,6 +1,5 @@
 CC=gcc
-INCDIRS=-I../uppercase -I../data -I../system
-CFLAGS=-g -std=c11 -Wall $(INCDIRS)
+CFLAGS=-g -std=c11 -Wall -I..
 
 libmath.a: math.o
 	ar rcs $@ $^

@@ -1,6 +1,5 @@
 CC=gcc
-INCDIRS=-I../data -I../math -I../system
-CFLAGS=-g -std=c11 -Wall $(INCDIRS)
+CFLAGS=-g -std=c11 -Wall -I..
 LDFLAGS=-L../math -L../data -L../system 
 LDLIBS=-lmath -ldata -lsystem
 

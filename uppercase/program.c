@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
-#include "program.h"
+#include "uppercase/program.h"
 
 // Libraries being used
 #include <stdio.h>

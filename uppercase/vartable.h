@@ -23,7 +23,7 @@
 #define _UC_PROGRAM_VARTABLE_H_
 
 // Headers being used
-#include "datum.h"
+#include "uppercase/datum.h"
 
 // Libraries being used
 #include <stdlib.h>
