@@ -21,71 +21,80 @@
 
 // Libraries being used
 #include <stdio.h>
+#include <stdlib.h>
+
+#define NEW(typ) (typ*)malloc(sizeof(typ))
 
 /**
- * The program file
- */
-static FILE *uc_program;
-
-/**
- * The current character
- */
-static char uc_current;
-
-/**
- * Sets the program to the given filename
+ * Opens an uppercase program from the given filename
  *
  * @param filename the name of the file
  * 
- * @return true if the program was opened successfully
+ * @return program data structure
  */
-int uc_open_program(const char *filename)
-{
-	return (uc_program = fopen(filename, "r")) != NULL;
+struct uc_program* uc_program_open(const char* filename) {
+	FILE* program_file = fopen(filename, "r");
+	if (program_file != NULL) {
+		struct uc_program* program = NEW(struct uc_program);
+		program->file = fopen(filename, "r");	
+		program->current = 0;
+		return program;
+	} else {
+		return NULL;
+	}
 }
 
 /**
- * Returns the current character
- * 
- * @return the current character
+ * Returns the current character in the program
+ *
+ * @param program uppercase program struct 
+ *
+ * @return the current character in the program
  */
-char uc_current_character()
-{
-	return uc_current;
+char uc_program_current_character(struct uc_program* program) {
+	return program->current;
 }
 
 /**
  * Returns true if the current character is not an uppercase letter
  *
+ * @param program uppercase program struct 
+ *
  * @return true if the current character is not an uppercase letter
  */
-int uc_invalid_character()
-{
-	return !(uc_current >= 'A' && uc_current <= 'Z');
+int uc_program_invalid_character(struct uc_program* program) {
+	return !('A' <= program->current && program->current <= 'Z');
 }
 
 /**
  * Advances to the next character in the program file
+ *
+ * @param program uppercase program struct 
  */
-void uc_next_character()
-{
-	uc_current = fgetc(uc_program);
+void uc_program_next(struct uc_program* program) {
+	program->current = fgetc(program->file);
 }
 
 /**
  * Returns true if the next character is not the end of file
  *
+ * @param program uppercase program struct 
+ *
  * @return true if the next character is not the end of file
  */
-int uc_continue()
-{
-	return uc_current != EOF;
+int uc_program_continue(struct uc_program* program) {
+	return program->current != EOF;
 }
 
 /**
  * Closes the program
+ * 
+ * @param program pointer to uppercase program struct  
  */
-void uc_close_program()
-{
-	fclose(uc_program);
+void uc_program_close(struct uc_program** program) {
+	fclose((*program)->file);
+	free(*program);
+	*program = NULL;
 }
+
+

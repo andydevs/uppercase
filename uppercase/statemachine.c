@@ -40,24 +40,24 @@
  *
  * @return true if the state machine ran unsuccessfully
  */
-int uc_state_machine_run(void)
+int uc_state_machine_run(struct uc_program* program)
 {
 	// Initialize stack, vartable, current character, and current state
 	uc_datum_stack_init();
 	uc_char_stack_init();
 	uc_vartable_init();
-	uc_next_character();
+	uc_program_next(program);
 	uc_state uc_current_state = &uc_main_state;
 
 	// Run the state machine loop
 	// While there are still more characters and states
-	while (uc_current_state != NULL && uc_continue())
+	while (uc_current_state != NULL && uc_program_continue(program))
 	{
 		// If an invalid character is spotted
-		if (uc_invalid_character())
+		if (uc_program_invalid_character(program))
 		{
 			// Throw error
-			uc_throw_error(UC_INPUT_CHAR_INVALD, "[RUN]");
+			uc_throw_error(program, UC_INPUT_CHAR_INVALD, "[RUN]");
 
 			// Don't forget to clear the stack and vartable
 			uc_datum_stack_clear();
@@ -68,10 +68,10 @@ int uc_state_machine_run(void)
 		}
 
 		// Run the current state and retrieve the next state
-		uc_current_state = uc_current_state();
+		uc_current_state = uc_current_state(program);
 
 		// Get next character
-		uc_next_character();
+		uc_program_next(program);
 	}
 
 	// Clear the stack
@@ -87,9 +87,9 @@ int uc_state_machine_run(void)
  *
  * This is where the state machine starts
  */
-void *uc_main_state(void)
+void *uc_main_state(struct uc_program* program)
 {
-	switch(uc_current_character())
+	switch(uc_program_current_character(program))
 	{
 		case 'D':
 			return &uc_data_state;
@@ -98,6 +98,6 @@ void *uc_main_state(void)
 		case 'M':
 			return &uc_math_state;
 		default:
-			return uc_throw_error(UC_CHAR_NOT_FOUND, "main");
+			return uc_throw_error(program, UC_CHAR_NOT_FOUND, "main");
 	}
 }

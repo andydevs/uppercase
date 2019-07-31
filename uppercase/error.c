@@ -27,21 +27,22 @@
 /**
  * Function for throwing errors
  *
+ * @param program the uppercase program struct
  * @param uc_err the error being thrown
  * @param state_description the description of the current state
  *
  * @return NULL pointer
  */
-void *uc_throw_error(uc_error_type uc_err, const char* state_description)
+void *uc_throw_error(struct uc_program *program, uc_error_type uc_err, const char* state_description)
 {
 	printf("ERROR in %s: ", state_description);
 	switch(uc_err)
 	{
 		case UC_INPUT_CHAR_INVALD:
-			printf("'%c' is invalid! Must be an uppercase letter!\n", uc_current_character());
+			printf("'%c' is invalid! Must be an uppercase letter!\n", uc_program_current_character(program));
 			break;
 		case UC_CHAR_NOT_FOUND:
-			printf("'%c' character not found!\n", uc_current_character());
+			printf("'%c' character not found!\n", uc_program_current_character(program));
 			break;
 		case UC_STACK_FULL:
 			printf("Stack is full!\n");

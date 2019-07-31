@@ -22,39 +22,42 @@
 #ifndef _UC_MODULE_SYSTEM_H_
 #define _UC_MODULE_SYSTEM_H_
 
+// Include
+#include "uppercase/program.h"
+
 /**
  * state system
  *
  * Handles system commands like print.
  */
-void *uc_system_state(void);
+void *uc_system_state(struct uc_program *program);
 
 /**
  * state stack
  *
  * Handles stack commands like inspect and clear
  */
-void *uc_stack_state(void);
+void *uc_stack_state(struct uc_program *program);
 
 /**
  * state variable
  *
  * Handles variable commands like get and set
  */
-void *uc_variable_state(void);
+void *uc_variable_state(struct uc_program *program);
 
 /**
  * state variable
  *
  * Handles getting values from vartable
  */
-void *uc_variable_get_state(void);
+void *uc_variable_get_state(struct uc_program *program);
 
 /**
  * state variable
  *
  * Handles setting values in vartable
  */
-void *uc_variable_set_state(void);
+void *uc_variable_set_state(struct uc_program *program);
 
 #endif

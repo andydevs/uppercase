@@ -22,6 +22,9 @@
 #ifndef _UC_ERROR_H_
 #define _UC_ERROR_H_
 
+// Includes
+#include "uppercase/program.h"
+
 /**
  * Defines error types
  */
@@ -38,11 +41,12 @@ uc_error_type;
 /**
  * Function for throwing errors
  *
+ * @param program the uppercase program struct
  * @param uc_err the error being thrown
  * @param state_description the description of the current state
  *
  * @return NULL pointer
  */
-void *uc_throw_error(uc_error_type uc_err, const char* state_description);
+void *uc_throw_error(struct uc_program *program, uc_error_type uc_err, const char* state_description);
 
 #endif

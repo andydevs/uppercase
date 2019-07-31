@@ -40,17 +40,18 @@ int main(int argc, char const *argv[])
 	}
 
 	// Open the file (return error if failed)
-	if (!uc_open_program(argv[1]))
+	struct uc_program* program = uc_program_open(argv[1]);
+	if (program == NULL)
 	{
 		printf("ERROR! Something went wrong when reading the file!\n");
 		return 1;
 	}
 
 	// Run program
-	int status = uc_state_machine_run();
+	int status = uc_state_machine_run(program);
 
 	// Close program 
-	uc_close_program();
+	uc_program_close(&program);
 	
 	// Exit status
 	return status;

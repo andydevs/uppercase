@@ -22,25 +22,27 @@
 #ifndef _UC_STATE_MACHINE_H_
 #define _UC_STATE_MACHINE_H_
 
+#include "uppercase/program.h"
+
 //----------------------------THE FOUNDATION-----------------------------
 
 /**
  * The uc_state type is a function pointer which returns a void pointer
  */
-typedef void *(*uc_state)(void);
+typedef void *(*uc_state)(struct uc_program* program);
 
 /**
  * Runs the UpperCase state machine.
  *
  * @return true if the state machine ran unsuccessfully
  */
-int uc_state_machine_run(void);
+int uc_state_machine_run(struct uc_program* program);
 
 /**
  * state main
  * 
  * This is where the state machine starts
  */
-void *uc_main_state(void);
+void *uc_main_state(struct uc_program* program);
 
 #endif

@@ -22,6 +22,8 @@
 #ifndef _UC_MODULE_MATH_H_
 #define _UC_MODULE_MATH_H_
 
+#include "uppercase/program.h"
+
 //----------------------------MATH STATE----------------------------
 
 /**
@@ -29,6 +31,6 @@
  *
  * Handles math operations
  */
-void *uc_math_state(void);
+void *uc_math_state(struct uc_program* program);
 
 #endif

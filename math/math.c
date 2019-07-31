@@ -62,9 +62,9 @@ void uc_modulus(void);
  *
  * Handles math operations
  */
-void *uc_math_state(void)
+void *uc_math_state(struct uc_program* program)
 {
-	switch(uc_current_character())
+	switch(uc_program_current_character(program))
 	{
 		case 'A':
 			uc_add();
@@ -82,7 +82,7 @@ void *uc_math_state(void)
 			uc_modulus();
 			return (void*)&uc_main_state;
 		default:
-			return uc_throw_error(UC_CHAR_NOT_FOUND, "main -> math");
+			return uc_throw_error(program, UC_CHAR_NOT_FOUND, "main -> math");
 	}
 }
 

@@ -27,44 +27,65 @@
  */
 #define NUMBER_OF_LETTERS 26
 
+// Includes
+#include <stdio.h>
+
 /**
- * Sets the program to the given filename
+ * The program file data structure
+ */
+struct uc_program {
+	FILE* file;
+	char current;
+};
+
+/**
+ * Opens an uppercase program from the given filename
  *
  * @param filename the name of the file
  * 
- * @return true if the program was opened successfully
+ * @return program data structure
  */
-int uc_open_program(const char *filename);
+struct uc_program* uc_program_open(const char* filename);
 
 /**
- * Returns the current character
- * 
- * @return the current character
+ * Returns the current character in the program
+ *
+ * @param program uppercase program struct 
+ *
+ * @return the current character in the program
  */
-char uc_current_character();
+char uc_program_current_character(struct uc_program* program);
 
 /**
  * Returns true if the current character is not an uppercase letter
  *
+ * @param program uppercase program struct 
+ *
  * @return true if the current character is not an uppercase letter
  */
-int uc_invalid_character();
+int uc_program_invalid_character(struct uc_program* program);
 
 /**
  * Advances to the next character in the program file
+ *
+ * @param program uppercase program struct 
  */
-void uc_next_character();
+void uc_program_next(struct uc_program* program);
 
 /**
  * Returns true if the next character is not the end of file
  *
+ * @param program uppercase program struct 
+ *
  * @return true if the next character is not the end of file
  */
-int uc_continue();
+int uc_program_continue(struct uc_program* program);
 
 /**
  * Closes the program
+ * 
+ * @param program pointer to uppercase program struct  
  */
-void uc_close_program();
+void uc_program_close(struct uc_program** program);
 
 #endif
