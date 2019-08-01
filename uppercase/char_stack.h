@@ -30,44 +30,68 @@
  */
 #define UC_CHAR_STACK_LENGTH 512
 
+// Define char stack data structure
+struct uc_char_stack {
+	int stack_cursor;
+	char stack_data[UC_CHAR_STACK_LENGTH];
+};
+
 /**
- * Initializes the stack
+ * Creates a char stack
+ *
+ * @return new char stack
  */
-void uc_char_stack_init(void);
+struct uc_char_stack *uc_char_stack_new(void);
 
 /**
  * Adds a character to the char stack
  *
- * @param c the character to add to the stack
+ * @param cstack the char stack
+ * @param c      the character to add to the stack
  *
  * @return true if the character is added successfully
  */
-int uc_char_stack_push(char c);
+int uc_char_stack_push(struct uc_char_stack *cstack, char c);
 
 /**
  * Returns a string datum from the char stack
  *
+ * @param cstack the char stack
+ *
  * @return a string datum from the char stack
  */
-uc_datum *uc_char_stack_get_string(void);
+uc_datum *uc_char_stack_get_string(struct uc_char_stack *cstack);
 
 /**
  * Returns an integer datum from the char stack
  *
+ * @param cstack the char stack
+ *
  * @return an integer datum from the char stack
  */
-uc_datum *uc_char_stack_get_integer(void);
+uc_datum *uc_char_stack_get_integer(struct uc_char_stack *cstack);
 
 /**
  * Returns a float datum from the char stack
  *
+ * @param cstack the char stack
+ *
  * @return a float datum from the char stack
  */
-uc_datum *uc_char_stack_get_float(void);
+uc_datum *uc_char_stack_get_float(struct uc_char_stack *cstack);
 
 /**
  * Clears the char stack
+ *
+ * @param cstack the char stack
  */
-void uc_char_stack_clear(void);
+void uc_char_stack_clear(struct uc_char_stack *cstack);
+
+/**
+ * Destroys the stack
+ *
+ * @param cstack the char stack
+ */
+void uc_char_stack_destroy(struct uc_char_stack **cstack);
 
 #endif

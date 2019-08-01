@@ -82,6 +82,7 @@ static char uc_float_digit(struct uc_program* program);
 /**
  * Adds the given character as a datum to the stack
  *
+ * @param cstack            uc char stack struct
  * @param program           uc program struct
  * @param c 		 		the character to add
  * @param next_state 		the next state to transition to 
@@ -91,11 +92,12 @@ static char uc_float_digit(struct uc_program* program);
  *
  * @return the next state depending on if the character is successfully added
  */
-static void* uc_add_character_data(struct uc_program* program, char c, void* next_state, const char* state_description);
+static void* uc_add_character_data(struct uc_char_stack* cstack, struct uc_program* program, char c, void* next_state, const char* state_description);
 
 /**
  * Adds the given character to the char stack
  *
+ * @param cstack            uc char stack struct
  * @param program           uc program struct
  * @param c 		 		the character to add
  * @param next_state 		the next state to transition to 
@@ -105,11 +107,12 @@ static void* uc_add_character_data(struct uc_program* program, char c, void* nex
  *
  * @return the next state depending on if the character is successfully added
  */
-static void* uc_add_character(struct uc_program* program, char c, void* next_state, const char* state_description);
+static void* uc_add_character(struct uc_char_stack* cstack, struct uc_program* program, char c, void* next_state, const char* state_description);
 
 /**
  * Terminates a long data sequence and adds it to the stack as the given type
  *
+ * @param cstack            uc char stack struct
  * @param program           uc program struct
  * @param type 				the type of the datum to add from the char stack 
  *							(must be string, float, or int)
@@ -118,7 +121,7 @@ static void* uc_add_character(struct uc_program* program, char c, void* next_sta
  *
  * @return the next state depending on if the character is successfully added
  */
-static void* uc_end_long_data(struct uc_program* program, uc_datum_type type, const char* state_description);
+static void* uc_end_long_data(struct uc_char_stack* cstack, struct uc_program* program, uc_datum_type type, const char* state_description);
 
 
 
@@ -127,7 +130,7 @@ static void* uc_end_long_data(struct uc_program* program, uc_datum_type type, co
 /**
  * The data state
  */
-void *uc_data_state(struct uc_program* program)
+void *uc_data_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -136,13 +139,13 @@ void *uc_data_state(struct uc_program* program)
 		case 'B':
 			return (void*)&uc_boolean_state;
 		case 'S':
-			uc_char_stack_clear();
+			uc_char_stack_clear(cstack);
 			return (void*)&uc_string_state;
 		case 'I':
-			uc_char_stack_clear();
+			uc_char_stack_clear(cstack);
 			return (void*)&uc_integer_state;
 		case 'F':
-			uc_char_stack_clear();
+			uc_char_stack_clear(cstack);
 			return (void*)&uc_float_state;
 		default:
 			return uc_throw_error(program, UC_CHAR_NOT_FOUND, "main -> data");
@@ -158,7 +161,7 @@ void *uc_data_state(struct uc_program* program)
  *
  * Handles string data types
  */
-void *uc_string_state(struct uc_program* program)
+void *uc_string_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -169,7 +172,7 @@ void *uc_string_state(struct uc_program* program)
 		case 'P':
 			return (void*)&uc_string_punctuation_state;
 		case 'E':
-			return uc_end_long_data(program, STRING, "main -> data -> string");
+			return uc_end_long_data(cstack, program, STRING, "main -> data -> string");
 		default:
 			return uc_throw_error(program, UC_CHAR_NOT_FOUND, "main -> data -> string");
 	}
@@ -180,7 +183,7 @@ void *uc_string_state(struct uc_program* program)
  *
  * Handles letters in strings
  */
-void *uc_string_letter_state(struct uc_program* program)
+void *uc_string_letter_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -198,9 +201,9 @@ void *uc_string_letter_state(struct uc_program* program)
  *
  * Handles uppercase letters in strings
  */
-void *uc_string_uppercase_state(struct uc_program* program)
+void *uc_string_uppercase_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character(program, uc_uppercase(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
+	return uc_add_character(cstack, program, uc_uppercase(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 /**
@@ -208,9 +211,9 @@ void *uc_string_uppercase_state(struct uc_program* program)
  *
  * Handles lowercase letters in strings
  */
-void *uc_string_lowercase_state(struct uc_program* program)
+void *uc_string_lowercase_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character(program, uc_lowercase(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
+	return uc_add_character(cstack, program, uc_lowercase(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 /**
@@ -218,9 +221,9 @@ void *uc_string_lowercase_state(struct uc_program* program)
  *
  * Handles whitespace characters in strings
  */
-void *uc_string_whitespace_state(struct uc_program* program)
+void *uc_string_whitespace_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character(program, uc_whitespace(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
+	return uc_add_character(cstack, program, uc_whitespace(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 /**
@@ -228,9 +231,9 @@ void *uc_string_whitespace_state(struct uc_program* program)
  *
  * Handles punctuation in strings
  */
-void *uc_string_punctuation_state(struct uc_program* program)
+void *uc_string_punctuation_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character(program, uc_punctuation(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
+	return uc_add_character(cstack, program, uc_punctuation(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
 
 //--------------------------CHARACTER STATE-------------------------
@@ -240,7 +243,7 @@ void *uc_string_punctuation_state(struct uc_program* program)
  * 
  * Handles string data types
  */
-void *uc_character_state(struct uc_program* program)
+void *uc_character_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -260,7 +263,7 @@ void *uc_character_state(struct uc_program* program)
  *
  * Handles letters
  */
-void *uc_character_letter_state(struct uc_program* program)
+void *uc_character_letter_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -278,9 +281,9 @@ void *uc_character_letter_state(struct uc_program* program)
  *
  * Handles uppercase letters
  */
-void *uc_character_uppercase_state(struct uc_program* program)
+void *uc_character_uppercase_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character_data(program, uc_uppercase(program), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_uppercase");
+	return uc_add_character_data(cstack, program, uc_uppercase(program), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_uppercase");
 }
 
 /**
@@ -288,9 +291,9 @@ void *uc_character_uppercase_state(struct uc_program* program)
  *
  * Handles lowercase letters
  */
-void *uc_character_lowercase_state(struct uc_program* program)
+void *uc_character_lowercase_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character_data(program, uc_lowercase(program), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_lowercase");
+	return uc_add_character_data(cstack, program, uc_lowercase(program), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_lowercase");
 }
 
 /**
@@ -298,9 +301,9 @@ void *uc_character_lowercase_state(struct uc_program* program)
  *
  * Handles whitespace characters
  */
-void *uc_character_whitespace_state(struct uc_program* program)
+void *uc_character_whitespace_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character_data(program, uc_whitespace(program), (void*)&uc_main_state, "main -> data -> character -> character_whitespace");
+	return uc_add_character_data(cstack, program, uc_whitespace(program), (void*)&uc_main_state, "main -> data -> character -> character_whitespace");
 }
 
 /**
@@ -308,9 +311,9 @@ void *uc_character_whitespace_state(struct uc_program* program)
  *
  * Handles punctuation
  */
-void *uc_character_punctuation_state(struct uc_program* program)
+void *uc_character_punctuation_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
-	return uc_add_character_data(program, uc_punctuation(program), (void*)&uc_main_state, "main -> data -> character -> character_punctuation");
+	return uc_add_character_data(cstack, program, uc_punctuation(program), (void*)&uc_main_state, "main -> data -> character -> character_punctuation");
 }
 
 
@@ -322,7 +325,7 @@ void *uc_character_punctuation_state(struct uc_program* program)
  *
  * Handles booleans
  */
-void *uc_boolean_state(struct uc_program* program)
+void *uc_boolean_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -342,15 +345,15 @@ void *uc_boolean_state(struct uc_program* program)
  *
  * Handles integers
  */
-void *uc_integer_state(struct uc_program* program)
+void *uc_integer_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	if (uc_program_current_character(program) == 'E')
 	{
-		return uc_end_long_data(program, INT, "main -> data -> integer");
+		return uc_end_long_data(cstack, program, INT, "main -> data -> integer");
 	}
 	else
 	{
-		return uc_add_character(program, uc_integer_digit(program), (void*)&uc_integer_state, "main -> data -> integer");
+		return uc_add_character(cstack, program, uc_integer_digit(program), (void*)&uc_integer_state, "main -> data -> integer");
 	}
 }
 
@@ -359,15 +362,15 @@ void *uc_integer_state(struct uc_program* program)
  *
  * Handles floats
  */
-void *uc_float_state(struct uc_program* program)
+void *uc_float_state(struct uc_program* program, struct uc_char_stack* cstack)
 {
 	if (uc_program_current_character(program) == 'E')
 	{
-		return uc_end_long_data(program, FLOAT, "main -> data -> float");
+		return uc_end_long_data(cstack, program, FLOAT, "main -> data -> float");
 	}
 	else
 	{
-		return uc_add_character(program, uc_float_digit(program), (void*)&uc_float_state, "main -> data -> float");
+		return uc_add_character(cstack, program, uc_float_digit(program), (void*)&uc_float_state, "main -> data -> float");
 	}
 }
 
@@ -522,6 +525,7 @@ static char uc_float_digit(struct uc_program* program)
 /**
  * Adds the given character as a datum to the stack
  *
+ * @param cstack            uc char stack struct
  * @param program           uc program struct
  * @param c 		 		the character to add
  * @param next_state 		the next state to transition to 
@@ -531,13 +535,13 @@ static char uc_float_digit(struct uc_program* program)
  *
  * @return the next state depending on if the character is successfully added
  */
-static void* uc_add_character(struct uc_program* program, char c, void* next_state, const char* state_description)
+static void* uc_add_character(struct uc_char_stack* cstack, struct uc_program* program, char c, void* next_state, const char* state_description)
 {
 	if (c == 0)
 	{
 		return uc_throw_error(program, UC_CHAR_NOT_FOUND, state_description);
 	}
-	else if (uc_char_stack_push(c))
+	else if (uc_char_stack_push(cstack, c))
 	{
 		return next_state;
 	}
@@ -550,6 +554,7 @@ static void* uc_add_character(struct uc_program* program, char c, void* next_sta
 /**
  * Adds the given character to the char stack
  *
+ * @param cstack            uc char stack struct
  * @param program           uc program struct
  * @param c 		 		the character to add
  * @param next_state 		the next state to transition to 
@@ -559,21 +564,21 @@ static void* uc_add_character(struct uc_program* program, char c, void* next_sta
  *
  * @return the next state depending on if the character is successfully added
  */
-static void* uc_end_long_data(struct uc_program* program, uc_datum_type type, const char* state_description)
+static void* uc_end_long_data(struct uc_char_stack* cstack, struct uc_program* program, uc_datum_type type, const char* state_description)
 {
-	if (uc_char_stack_push('\0'))
+	if (uc_char_stack_push(cstack, '\0'))
 	{
 		uc_datum *d;
 		switch(type)
 		{
 			case STRING:
-				d = uc_char_stack_get_string();
+				d = uc_char_stack_get_string(cstack);
 				break;
 			case FLOAT:
-				d = uc_char_stack_get_float();
+				d = uc_char_stack_get_float(cstack);
 				break;
 			case INT:
-				d = uc_char_stack_get_integer();
+				d = uc_char_stack_get_integer(cstack);
 				break;
 			default:
 				break;
@@ -596,6 +601,7 @@ static void* uc_end_long_data(struct uc_program* program, uc_datum_type type, co
 /**
  * Terminates a long data sequence and adds it to the stack as the given type
  *
+ * @param cstack            uc char stack struct
  * @param program           uc program struct
  * @param type 				the type of the datum to add from the char stack 
  *							(must be string, float, or int)
@@ -604,7 +610,7 @@ static void* uc_end_long_data(struct uc_program* program, uc_datum_type type, co
  *
  * @return the next state depending on if the character is successfully added
  */
-static void* uc_add_character_data(struct uc_program* program, char c, void* next_state, const char* state_description)
+static void* uc_add_character_data(struct uc_char_stack* cstack, struct uc_program* program, char c, void* next_state, const char* state_description)
 {
 	if (c == 0)
 	{

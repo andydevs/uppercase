@@ -17,13 +17,12 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
+#include "uppercase/helper.h"
 #include "uppercase/program.h"
 
 // Libraries being used
 #include <stdio.h>
 #include <stdlib.h>
-
-#define NEW(typ) (typ*)malloc(sizeof(typ))
 
 /**
  * Opens an uppercase program from the given filename

@@ -18,6 +18,7 @@
 
 // Headers being used
 #include "uppercase/char_stack.h"
+#include "uppercase/helper.h"
 
 // Headers being used
 #include <stdio.h>
@@ -25,41 +26,34 @@
 #include <string.h>
 
 /**
- * The character stack
+ * Creates a char stack
+ *
+ * @return new char stack
  */
-static char uc_char_stack[UC_STRING_MAX_LENGTH];
-
-/**
- * The current position in the char stack
- * Also the number of elements in the char stack
- */
-static int uc_char_stack_cursor;
-
-/**
- * Initializes the stack
- */
-void uc_char_stack_init(void)
-{
+struct uc_char_stack *uc_char_stack_new(void) {
+	struct uc_char_stack* cstack = NEW(struct uc_char_stack);	
 	for (int i = 0; i < UC_CHAR_STACK_LENGTH; ++i)
 	{
-		uc_char_stack[i] = 0;
+		cstack->stack_data[i] = 0;
 	}
-	uc_char_stack_cursor = 0;
+	cstack->stack_cursor = 0;
+	return cstack;
 }
 
 /**
  * Adds a character to the char stack
  *
+ * @param cstack the char stack
  * @param c the character to add to the stack
  *
  * @return true if the character is added successfully
  */
-int uc_char_stack_push(char c)
+int uc_char_stack_push(struct uc_char_stack* cstack, char c)
 {
-	if (uc_char_stack_cursor < UC_CHAR_STACK_LENGTH)
+	if (cstack->stack_cursor < UC_CHAR_STACK_LENGTH)
 	{
-		uc_char_stack[uc_char_stack_cursor] = c;
-		uc_char_stack_cursor++;
+		cstack->stack_data[cstack->stack_cursor] = c;
+		cstack->stack_cursor++;
 		return 1;
 	}
 	else
@@ -71,43 +65,63 @@ int uc_char_stack_push(char c)
 /**
  * Returns a string datum from the char stack
  *
+ * @param cstack the char stack
+ *
  * @return a string datum from the char stack
  */
-uc_datum* uc_char_stack_get_string(void)
+uc_datum* uc_char_stack_get_string(struct uc_char_stack* cstack)
 {
-	char* string = (char*)malloc(uc_char_stack_cursor*sizeof(char));
-	strcpy(string, uc_char_stack);
+	char* string = (char*)malloc(cstack->stack_cursor*sizeof(char));
+	strcpy(string, cstack->stack_data);
 	return uc_datum_from_string(string);
 }
 
 /**
  * Returns an integer datum from the char stack
  *
+ * @param cstack the char stack
+ *
  * @return an integer datum from the char stack
  */
-uc_datum *uc_char_stack_get_integer(void)
+uc_datum *uc_char_stack_get_integer(struct uc_char_stack* cstack)
 {
-	return uc_datum_from_integer(atoi(uc_char_stack));
+	return uc_datum_from_integer(atoi(cstack->stack_data));
 }
 
 /**
  * Returns a float datum from the char stack
  *
+ * @param cstack the char stack
+ *
  * @return a float datum from the char stack
  */
-uc_datum *uc_char_stack_get_float(void)
+uc_datum *uc_char_stack_get_float(struct uc_char_stack* cstack)
 {
-	return uc_datum_from_float(atof(uc_char_stack));
+	return uc_datum_from_float(atof(cstack->stack_data));
 }
 
 /**
  * Clears the char stack
+ *
+ * @param cstack the char stack
  */
-void uc_char_stack_clear(void)
+void uc_char_stack_clear(struct uc_char_stack* cstack)
 {
-	for (int i = 0; i < uc_char_stack_cursor; ++i)
+	for (int i = 0; i < UC_CHAR_STACK_LENGTH; ++i)
 	{
-		uc_char_stack[i] = 0;
+		cstack->stack_data[i] = 0;
 	}
-	uc_char_stack_cursor = 0;
+	cstack->stack_cursor = 0;
 }
+
+/**
+ * Destroys the stack
+ *
+ * @param cstack the char stack
+ */
+void uc_char_stack_destroy(struct uc_char_stack **cstack)
+{
+	if (*cstack) free(*cstack);
+	*cstack = NULL;
+}
+
