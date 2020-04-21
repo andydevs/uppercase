@@ -1,5 +1,7 @@
 # TODO
 
+- Any whitespace will terminate the program
+
 - Unit test objects
 	- Program
 	- Character Stack
