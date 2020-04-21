@@ -30,10 +30,16 @@
  */
 #define UC_STACK_LENGTH 1024
 
+// Define datum stack data structure
+struct uc_datum_stack {
+	int stack_cursor;
+	uc_datum* stack_data[UC_STACK_LENGTH];	
+};
+
 /**
- * Initializes the stack
+ * Creates a new stack
  */
-void uc_datum_stack_init(void);
+struct uc_datum_stack* uc_datum_stack_new(void);
 
 /**
  * Adds a datum to the stack
@@ -42,28 +48,33 @@ void uc_datum_stack_init(void);
  *
  * @return true if data was successfully added
  */
-int uc_datum_stack_push(uc_datum *d);
+int uc_datum_stack_push(struct uc_datum_stack* dstack, uc_datum *d);
 
 /**
  * Removes the last datum added to the stack and returns it
  *
  * @return the last datum added to the stack
  */
-uc_datum *uc_datum_stack_pop(void);
+uc_datum *uc_datum_stack_pop(struct uc_datum_stack* dstack);
 
 /**
  * Prints the entire stack
  */
-void uc_datum_stack_print(void);
+void uc_datum_stack_print(struct uc_datum_stack* dstack);
 
 /**
  * Prints a detailed description of the data in the stack
  */
-void uc_datum_stack_inspect(void);
+void uc_datum_stack_inspect(struct uc_datum_stack* dstack);
 
 /**
  * Clears all of the data from the stack
  */
-void uc_datum_stack_clear(void);
+void uc_datum_stack_clear(struct uc_datum_stack* dstack);
+
+/**
+ * Destroys uc datum stack
+ */
+void uc_datum_stack_destroy(struct uc_datum_stack** dstackloc);
 
 #endif

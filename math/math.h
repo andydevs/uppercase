@@ -23,6 +23,8 @@
 #define _UC_MODULE_MATH_H_
 
 #include "uppercase/program.h"
+#include "uppercase/datum_stack.h"
+#include "uppercase/char_stack.h"
 
 //----------------------------MATH STATE----------------------------
 
@@ -31,6 +33,6 @@
  *
  * Handles math operations
  */
-void *uc_math_state(struct uc_program* program);
+void *uc_math_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
 
 #endif

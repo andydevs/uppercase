@@ -23,6 +23,7 @@
 #define _UC_STATE_MACHINE_H_
 
 #include "uppercase/program.h"
+#include "uppercase/datum_stack.h"
 #include "uppercase/char_stack.h"
 
 //----------------------------THE FOUNDATION-----------------------------
@@ -30,7 +31,7 @@
 /**
  * The uc_state type is a function pointer which returns a void pointer
  */
-typedef void *(*uc_state)(struct uc_program* program, struct uc_char_stack* cstack);
+typedef void *(*uc_state)(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
 
 /**
  * Runs the UpperCase state machine.
@@ -44,6 +45,6 @@ int uc_state_machine_run(struct uc_program* program);
  * 
  * This is where the state machine starts
  */
-void *uc_main_state(struct uc_program* program, struct uc_char_stack* cstack);
+void *uc_main_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
 
 #endif

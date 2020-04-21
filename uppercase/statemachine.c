@@ -42,10 +42,12 @@
  */
 int uc_state_machine_run(struct uc_program* program)
 {
-	// Setup
+	// Setup stuff
 	struct uc_char_stack* cstack = uc_char_stack_new();
-	uc_datum_stack_init();
+	struct uc_datum_stack* dstack = uc_datum_stack_new();
 	uc_vartable_init();
+
+	// Initialize program
 	uc_program_next(program);
 	uc_state uc_current_state = &uc_main_state;
 
@@ -53,25 +55,25 @@ int uc_state_machine_run(struct uc_program* program)
 	// While there are still more characters and states
 	while (uc_current_state != NULL && uc_program_continue(program))
 	{
-		// IDEA: move this to main state
 		// Error if an invalid character is spotted
 		if (uc_program_invalid_character(program))
 		{
+			// Error and teardown that shit
 			uc_throw_error(program, UC_INPUT_CHAR_INVALD, "[RUN]");
 			uc_char_stack_destroy(&cstack);
-			uc_datum_stack_clear();
+			uc_datum_stack_destroy(&dstack);
 			uc_vartable_clear();
 			return 1;
 		}
 
 		// Run the current state and retrieve the next state and character
-		uc_current_state = uc_current_state(program, cstack);
+		uc_current_state = uc_current_state(program, dstack, cstack);
 		uc_program_next(program);
 	}
 
 	// Teardown
 	uc_char_stack_destroy(&cstack);
-	uc_datum_stack_clear();
+	uc_datum_stack_destroy(&dstack);
 	uc_vartable_clear();
 
 	// Return program success
@@ -83,7 +85,7 @@ int uc_state_machine_run(struct uc_program* program)
  *
  * This is where the state machine starts
  */
-void *uc_main_state(struct uc_program* program, struct uc_char_stack* cstack)
+void *uc_main_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
 {
 	switch(uc_program_current_character(program))
 	{
