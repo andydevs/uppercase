@@ -15,9 +15,7 @@
 	- Vartable
 	- Program
 
-- Whitespace is ignored
-
-- Comment system (separate by ;)
+- Whitespace terminates the program
 
 - Uppercase instance
 	- Uppercase instance which contains file, datum stack, character stack, and vartable
