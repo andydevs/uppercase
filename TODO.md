@@ -2,6 +2,8 @@
 
 - Consolodate everything (don't need it in separate files)
 
+- Whitespace terminates the program
+
 - Update interfaces to return and require data types for each parts of the program rather than use static variables
 	- Program [done]
 	- Stack [done]
@@ -9,26 +11,16 @@
 		- Datum stack [done]
 	- Vartable
 
-- Unit test objects
-	- Character Stack
-	- Datum Stack
-	- Vartable
-	- Program
-
-- Whitespace terminates the program
-
 - Uppercase instance
 	- Uppercase instance which contains file, datum stack, character stack, and vartable
 	- Change state functions to require only uppercase instance
 
-- Jump
-	- Jump to index
-	- Jump if condition on stack
-
-- IO Files
-	- Read
-	- Write
-	- Move Back
-	- Move Forward
-
 - Make Datum Stack a linked list
+
+- Jump (J)
+	- (JR) Jump to index (written in uppercase)
+	- (JT) Jump if true
+
+- Standard in/out (I)
+	- (IR) Read
+	- (IW) Write
