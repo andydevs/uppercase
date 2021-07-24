@@ -1,6 +1,5 @@
 # TODO
 
-
 - Update interfaces to return and require data types for each parts of the program rather than use static variables
 	- Program [done]
 	- Stack [done]
