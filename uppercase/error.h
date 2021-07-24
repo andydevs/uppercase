@@ -23,7 +23,7 @@
 #define _UC_ERROR_H_
 
 // Includes
-#include "uppercase/program.h"
+#include "program.h"
 
 /**
  * Defines error types

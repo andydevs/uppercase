@@ -23,9 +23,9 @@
 #define _UC_MODULE_SYSTEM_H_
 
 // Include
-#include "uppercase/program.h"
-#include "uppercase/datum_stack.h"
-#include "uppercase/char_stack.h"
+#include "program.h"
+#include "datum_stack.h"
+#include "char_stack.h"
 
 /**
  * state system

@@ -23,9 +23,9 @@
 #define _UC_MODULE_DATA_H_
 
 // Include program
-#include "uppercase/program.h"
-#include "uppercase/char_stack.h"
-#include "uppercase/datum_stack.h"
+#include "program.h"
+#include "char_stack.h"
+#include "datum_stack.h"
 
 //----------------------------DATA STATE----------------------------
 

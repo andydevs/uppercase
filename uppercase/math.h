@@ -22,9 +22,9 @@
 #ifndef _UC_MODULE_MATH_H_
 #define _UC_MODULE_MATH_H_
 
-#include "uppercase/program.h"
-#include "uppercase/datum_stack.h"
-#include "uppercase/char_stack.h"
+#include "program.h"
+#include "datum_stack.h"
+#include "char_stack.h"
 
 //----------------------------MATH STATE----------------------------
 

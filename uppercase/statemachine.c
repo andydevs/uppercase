@@ -17,17 +17,17 @@
 //-----------------------------------------------------------------------
 
 // Program files being used
-#include "uppercase/statemachine.h"
-#include "uppercase/program.h"
-#include "uppercase/error.h"
-#include "uppercase/char_stack.h"
-#include "uppercase/datum_stack.h"
-#include "uppercase/vartable.h"
+#include "statemachine.h"
+#include "program.h"
+#include "error.h"
+#include "char_stack.h"
+#include "datum_stack.h"
+#include "vartable.h"
 
 // Modules being used
-#include "data/data.h"
-#include "system/system.h"
-#include "math/math.h"
+#include "data.h"
+#include "system.h"
+#include "math.h"
 
 // Libraries being used
 #include <stdio.h>

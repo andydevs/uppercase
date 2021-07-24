@@ -23,7 +23,7 @@
 #define _UC_DATUM_STACK_H_
 
 // Headers being used
-#include "uppercase/datum.h"
+#include "datum.h"
 
 /**
  * The maximum number of values that can be added in the stack

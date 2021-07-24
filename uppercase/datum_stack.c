@@ -17,8 +17,8 @@
 //-----------------------------------------------------------------------
 
 // Includes
-#include "uppercase/datum_stack.h"
-#include "uppercase/helper.h"
+#include "datum_stack.h"
+#include "helper.h"
 
 // Headers being used
 #include <stdio.h>

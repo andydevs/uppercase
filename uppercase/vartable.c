@@ -17,8 +17,8 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
-#include "uppercase/vartable.h"
-#include "uppercase/datum.h"
+#include "vartable.h"
+#include "datum.h"
 
 // Libraries being used
 #include <stdio.h>

@@ -16,9 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //-----------------------------------------------------------------------
 
-#include "math/math.h"
-#include "uppercase/statemachine.h"
-#include "uppercase/error.h"
+#include "math.h"
+#include "statemachine.h"
+#include "error.h"
 
 //--------------------------HELPER HEADERS--------------------------
 
