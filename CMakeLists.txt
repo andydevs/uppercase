@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.0)
+project(uppercase)
+include_directories("uppercase")
+file(GLOB SOURCES "uppercase/*.c")
+add_executable(uppercase ${SOURCES})

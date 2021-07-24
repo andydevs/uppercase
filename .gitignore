@@ -1,5 +1,5 @@
-# Output file
-uppercase/uppercase
+# Build directory
+build
 
 # Prerequisites
 *.d
