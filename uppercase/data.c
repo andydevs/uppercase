@@ -648,14 +648,8 @@ static void* uc_end_long_data(struct uc_datum_stack* dstack, struct uc_char_stac
 			default:
 				break;
 		}
-		if (uc_datum_stack_push(dstack, d))
-		{
-			return (void*)&uc_main_state;
-		}
-		else
-		{
-			return uc_throw_error(program, UC_STACK_FULL, state_description);
-		}
+		uc_datum_stack_push(dstack, d);
+		return (void*)&uc_main_state;
 	}
 	else
 	{
@@ -681,12 +675,9 @@ static void* uc_add_character_data(struct uc_datum_stack* dstack, struct uc_prog
 	{
 		return uc_throw_error(program, UC_CHAR_NOT_FOUND, state_description);
 	}
-	else if (uc_datum_stack_push(dstack, uc_datum_from_char(c)))
-	{
-		return next_state;
-	}
 	else
 	{
-		return uc_throw_error(program, UC_CHAR_STACK_FULL, state_description);
+		uc_datum_stack_push(dstack, uc_datum_from_char(c));
+		return next_state;
 	}
 }

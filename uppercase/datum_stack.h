@@ -25,15 +25,15 @@
 // Headers being used
 #include "datum.h"
 
-/**
- * The maximum number of values that can be added in the stack
- */
-#define UC_STACK_LENGTH 1024
+// Define node of linked list
+typedef struct uc_datum_stack_node_struct {
+	uc_datum* datum;
+	struct uc_datum_stack_node_struct* next;
+} uc_datum_stack_node;
 
 // Define datum stack data structure
 struct uc_datum_stack {
-	int stack_cursor;
-	uc_datum* stack_data[UC_STACK_LENGTH];	
+	uc_datum_stack_node* head;
 };
 
 /**
@@ -45,10 +45,8 @@ struct uc_datum_stack* uc_datum_stack_new(void);
  * Adds a datum to the stack
  *
  * @param d the data to add to the stack
- *
- * @return true if data was successfully added
  */
-int uc_datum_stack_push(struct uc_datum_stack* dstack, uc_datum *d);
+void uc_datum_stack_push(struct uc_datum_stack* dstack, uc_datum *d);
 
 /**
  * Removes the last datum added to the stack and returns it

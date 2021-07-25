@@ -33,11 +33,7 @@
 struct uc_datum_stack* uc_datum_stack_new()
 {
 	struct uc_datum_stack* dstack = NEW(struct uc_datum_stack);
-	for (int i = 0; i < UC_STACK_LENGTH; ++i)
-	{
-		dstack->stack_data[i] = NULL;
-	}
-	dstack->stack_cursor = 0;
+	dstack->head = NULL;
 	return dstack;
 };
 
@@ -46,20 +42,12 @@ struct uc_datum_stack* uc_datum_stack_new()
  *
  * @param d the data to add
  */
-int uc_datum_stack_push(struct uc_datum_stack* dstack, uc_datum *d)
+void uc_datum_stack_push(struct uc_datum_stack* dstack, uc_datum *d)
 {
-	// Add the data if the uc_stack is not full, and return True
-	// Else, return false
-	if (dstack->stack_cursor < UC_STACK_LENGTH)
-	{
-		dstack->stack_data[dstack->stack_cursor] = d;
-		dstack->stack_cursor++;
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+	uc_datum_stack_node* node = NEW(uc_datum_stack_node);
+	node->datum = d;
+	node->next = dstack->head;
+	dstack->head = node;
 }
 
 /**
@@ -69,18 +57,17 @@ int uc_datum_stack_push(struct uc_datum_stack* dstack, uc_datum *d)
  */
 uc_datum* uc_datum_stack_pop(struct uc_datum_stack* dstack)
 {
-	// Remove data from uc_stack and return it if there is any
-	// Else return NULL
-	if (dstack->stack_cursor > 0)
+	if (dstack->head == NULL) 
 	{
-		uc_datum *d = dstack->stack_data[dstack->stack_cursor - 1];
-		dstack->stack_data[dstack->stack_cursor - 1] = NULL;
-		dstack->stack_cursor--;
-		return d;
+		return NULL;
 	}
 	else
 	{
-		return NULL;
+		uc_datum_stack_node* node = dstack->head;
+		dstack->head = node->next;
+		uc_datum* d = node->datum;
+		free(node);
+		return d;
 	}
 }
 
@@ -90,9 +77,9 @@ uc_datum* uc_datum_stack_pop(struct uc_datum_stack* dstack)
 void uc_datum_stack_print(struct uc_datum_stack* dstack)
 {
 	// Print all of the data stored in the uc_stack
-	for (int i = 0; i < dstack->stack_cursor; ++i)
+	for (uc_datum_stack_node* node = dstack->head; node != NULL; node = node->next)
 	{
-		uc_datum_print(dstack->stack_data[i]);
+		uc_datum_print(node->datum);
 	}
 }
 
@@ -101,12 +88,12 @@ void uc_datum_stack_print(struct uc_datum_stack* dstack)
  */
 void uc_datum_stack_inspect(struct uc_datum_stack* dstack)
 {
-	printf("Stack has %d items:\n", dstack->stack_cursor);
+	printf("Stack has these items:\n");
 	// Print all of the data stored in the uc_stack
-	for (int i = 0; i < dstack->stack_cursor; ++i)
+	for (uc_datum_stack_node* node = dstack->head; node != NULL; node = node->next)
 	{
 		printf("    ");
-		uc_datum_inspect(dstack->stack_data[i]);
+		uc_datum_inspect(node->datum);
 		printf("\n");
 	}	
 }
@@ -116,18 +103,12 @@ void uc_datum_stack_inspect(struct uc_datum_stack* dstack)
  */
 void uc_datum_stack_clear(struct uc_datum_stack* dstack)
 {
-	// Free all data in the uc_stack and set to null
-	for (int i = 0; i < UC_STACK_LENGTH; ++i)
+	uc_datum* pop = uc_datum_stack_pop(dstack);
+	while(pop != NULL)
 	{
-		if (dstack->stack_data[i] != NULL)
-		{
-			uc_datum_destroy(dstack->stack_data[i]);
-			dstack->stack_data[i] = NULL;
-		}
+		uc_datum_destroy(pop);
+		pop = uc_datum_stack_pop(dstack);
 	}
-
-	// Set cursor to zero
-	dstack->stack_cursor = 0;
 }
 
 /**

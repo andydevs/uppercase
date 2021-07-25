@@ -5,13 +5,10 @@
 	- [x] Character Stack
 	- [x] Datum Stack
 	- [x] Vartable
-
-- Make Datum Stack a linked list
-
-- Jump (J)
-	- (JR) Jump to index (written in uppercase)
-	- (JT) Jump if true
-
-- Standard in/out (I)
-	- (IR) Read
-	- (IW) Write
+- [x] Make Datum Stack a linked list
+- [ ] Jump (J)
+	- [ ] (JR) Jump to index (written in uppercase)
+	- [ ] (JT) Jump if true
+- [ ] Standard in/out (I)
+	- [ ] (IR) Read
+	- [ ] (IW) Write
