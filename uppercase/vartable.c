@@ -17,6 +17,7 @@
 //-----------------------------------------------------------------------
 
 // Headers being used
+#include "helper.h"
 #include "vartable.h"
 #include "datum.h"
 
@@ -24,76 +25,81 @@
 #include <stdio.h>
 
 /**
- * Holds the vartable values
+ * Create a new vartable
  */
-static uc_datum *uc_vartable[UC_VARTABLE_LENGTH];
-
-/**
- * Initializes the vartable
- */
-void uc_vartable_init(void)
+struct uc_vartable* uc_vartable_new(void)
 {
+	struct uc_vartable* vartable = NEW(struct uc_vartable);
 	for (int i = 0; i < UC_VARTABLE_LENGTH; ++i)
 	{
-		uc_vartable[i] = NULL;
+		vartable->table[i] = NULL;
 	}
+	return vartable;
 }
 
 /**
  * Sets the given leter address of the vartable to the given uc_datum value
  *
- * @param address the address (A to Z) to set
- * @param value   the value being set at the address
+ * @param vartable the vartable to modify
+ * @param address  the address (A to Z) to set
+ * @param value    the value being set at the address
  */
-void uc_vartable_set(char address, uc_datum* value)
+void uc_vartable_set(struct uc_vartable* vartable, char address, uc_datum* value)
 {
-	uc_vartable[address - 'A'] = value;
+	vartable->table[address - 'A'] = value;
 }
 
 /**
  * Gets the uc_datum value at the given letter address in the vartable
  *
- * @param address the address (A to Z) to get
+ * @param vartable the vartable to access
+ * @param address  the address (A to Z) to get
  *
  * @return the value at the address
  */
-uc_datum* uc_vartable_get(char address)
+uc_datum* uc_vartable_get(struct uc_vartable* vartable, char address)
 {
-	return uc_datum_from_reference(uc_vartable[address - 'A']);
+	return uc_datum_from_reference(vartable->table[address - 'A']);
 }
 
 /**
  * Prints a detailed description of the data stored in the vartable
+ *
+ * @param vartable the vartable to access
  */
-void uc_vartable_inspect(void)
+void uc_vartable_inspect(struct uc_vartable* vartable)
 {
 	printf("Set variables:\n");
 	for (int i = 0; i < UC_VARTABLE_LENGTH; ++i)
 	{
-		if (uc_vartable[i] != NULL)
+		if (vartable->table[i] != NULL)
 		{
 			printf("    %c -> ", (char)(i + 'A'));
-			uc_datum_inspect(uc_vartable[i]);
+			uc_datum_inspect(vartable->table[i]);
 			printf("\n");
 		}
 	}
 }
 
 /**
- * Clears all of the data in the vartable
+ * Destroy vartable
  */
-void uc_vartable_clear()
+void uc_vartable_destroy(struct uc_vartable** vartableloc)
 {
 	// For each variable in the vartable
 	for (int i = 0; i < UC_VARTABLE_LENGTH; ++i)
 	{
 		// Destroy variable if variable is not null
-		if (uc_vartable[i] != NULL)
+		if ((*vartableloc)->table[i] != NULL)
 		{
-			uc_datum_destroy(uc_vartable[i]);
+			uc_datum_destroy((*vartableloc)->table[i]);
 		}
 
 		// Set variable to null
-		uc_vartable[i] = NULL;
+		(*vartableloc)->table[i] = NULL;
 	}
+
+	// Destroy vartable
+	free(*vartableloc);
+	*vartableloc = NULL;
 }

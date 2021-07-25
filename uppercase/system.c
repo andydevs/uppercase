@@ -42,7 +42,11 @@ static void uc_inspect(struct uc_datum_stack* dstack);
  *
  * Handles system commands like print
  */
-void *uc_system_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_system_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -66,7 +70,11 @@ void *uc_system_state(struct uc_program *program, struct uc_datum_stack* dstack,
  *
  * Handles stack commands like inspect and clear
  */
-void *uc_stack_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_stack_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -86,7 +94,11 @@ void *uc_stack_state(struct uc_program *program, struct uc_datum_stack* dstack, 
  *
  * Handles variable commands like get and set
  */
-void *uc_variable_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_variable_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -95,7 +107,7 @@ void *uc_variable_state(struct uc_program *program, struct uc_datum_stack* dstac
 		case 'G':
 			return &uc_variable_get_state;
 		case 'I':
-			uc_vartable_inspect();
+			uc_vartable_inspect(vtable);
 			return &uc_main_state;
 		default:
 			return uc_throw_error(program, UC_CHAR_NOT_FOUND, "main -> system -> variable");
@@ -107,9 +119,13 @@ void *uc_variable_state(struct uc_program *program, struct uc_datum_stack* dstac
  *
  * Handles getting values from vartable
  */
-void *uc_variable_get_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_variable_get_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
-	uc_datum *d = uc_vartable_get(uc_program_current_character(program));
+	uc_datum *d = uc_vartable_get(vtable, uc_program_current_character(program));
 	uc_datum_stack_push(dstack, d);
 	return &uc_main_state;
 }
@@ -119,10 +135,14 @@ void *uc_variable_get_state(struct uc_program *program, struct uc_datum_stack* d
  *
  * Handles setting values in vartable
  */
-void *uc_variable_set_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_variable_set_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	uc_datum *d = uc_datum_stack_pop(dstack);
-	uc_vartable_set(uc_program_current_character(program), d);
+	uc_vartable_set(vtable, uc_program_current_character(program), d);
 	return &uc_main_state;
 }
 

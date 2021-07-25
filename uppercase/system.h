@@ -26,40 +26,61 @@
 #include "program.h"
 #include "datum_stack.h"
 #include "char_stack.h"
+#include "vartable.h"
 
 /**
  * state system
  *
  * Handles system commands like print.
  */
-void *uc_system_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+void *uc_system_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 /**
  * state stack
  *
  * Handles stack commands like inspect and clear
  */
-void *uc_stack_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+void *uc_stack_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 /**
  * state variable
  *
  * Handles variable commands like get and set
  */
-void *uc_variable_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+void *uc_variable_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 /**
  * state variable
  *
  * Handles getting values from vartable
  */
-void *uc_variable_get_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+void *uc_variable_get_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 /**
  * state variable
  *
  * Handles setting values in vartable
  */
-void *uc_variable_set_state(struct uc_program *program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+void *uc_variable_set_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 #endif

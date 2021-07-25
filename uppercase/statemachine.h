@@ -25,13 +25,18 @@
 #include "program.h"
 #include "datum_stack.h"
 #include "char_stack.h"
+#include "vartable.h"
 
 //----------------------------THE FOUNDATION-----------------------------
 
 /**
  * The uc_state type is a function pointer which returns a void pointer
  */
-typedef void *(*uc_state)(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+typedef void *(*uc_state)(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 /**
  * Runs the UpperCase state machine.
@@ -45,6 +50,10 @@ int uc_state_machine_run(struct uc_program* program);
  * 
  * This is where the state machine starts
  */
-void *uc_main_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+void *uc_main_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 #endif

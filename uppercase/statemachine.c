@@ -45,7 +45,7 @@ int uc_state_machine_run(struct uc_program* program)
 	// Setup stuff
 	struct uc_char_stack* cstack = uc_char_stack_new();
 	struct uc_datum_stack* dstack = uc_datum_stack_new();
-	uc_vartable_init();
+	struct uc_vartable* vtable = uc_vartable_new();
 
 	// Initialize program
 	uc_program_next(program);
@@ -62,19 +62,19 @@ int uc_state_machine_run(struct uc_program* program)
 			uc_throw_error(program, UC_INPUT_CHAR_INVALD, "[RUN]");
 			uc_char_stack_destroy(&cstack);
 			uc_datum_stack_destroy(&dstack);
-			uc_vartable_clear();
+			uc_vartable_destroy(&vtable);
 			return 1;
 		}
 
 		// Run the current state and retrieve the next state and character
-		uc_current_state = uc_current_state(program, dstack, cstack);
+		uc_current_state = uc_current_state(program, dstack, cstack, vtable);
 		uc_program_next(program);
 	}
 
 	// Teardown
 	uc_char_stack_destroy(&cstack);
 	uc_datum_stack_destroy(&dstack);
-	uc_vartable_clear();
+	uc_vartable_destroy(&vtable);
 
 	// Return program success
 	return 0;
@@ -85,7 +85,11 @@ int uc_state_machine_run(struct uc_program* program)
  *
  * This is where the state machine starts
  */
-void *uc_main_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_main_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{

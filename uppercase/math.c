@@ -59,7 +59,11 @@ void uc_modulus(struct uc_datum_stack* dstack);
  *
  * Handles math operations
  */
-void *uc_math_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_math_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{

@@ -34,35 +34,46 @@
 #define UC_VARTABLE_LENGTH 26
 
 /**
- * Initializes the vartable
+ * Variable table
  */
-void uc_vartable_init(void);
+struct uc_vartable {
+    uc_datum* table[UC_VARTABLE_LENGTH];
+};
+
+/**
+ * Create a new vartable
+ */
+struct uc_vartable* uc_vartable_new(void);
 
 /**
  * Sets the given leter address of the vartable to the given uc_datum value
  *
- * @param address the address (A to Z) to set
- * @param value   the value being set at the address
+ * @param vartable the vartable to modify
+ * @param address  the address (A to Z) to set
+ * @param value    the value being set at the address
  */
-void uc_vartable_set(char address, uc_datum* value);
+void uc_vartable_set(struct uc_vartable* vartable, char address, uc_datum* value);
 
 /**
  * Gets the uc_datum value at the given letter address in the vartable
  *
- * @param address the address (A to Z) to get
+ * @param vartable the vartable to access
+ * @param address  the address (A to Z) to get
  *
  * @return the value at the address
  */
-uc_datum* uc_vartable_get(char address);
+uc_datum* uc_vartable_get(struct uc_vartable* vartable, char address);
 
 /**
  * Prints a detailed description of the data stored in the vartable
+ *
+ * @param vartable the vartable to access
  */
-void uc_vartable_inspect(void);
+void uc_vartable_inspect(struct uc_vartable* vartable);
 
 /**
- * Clears all of the data in the vartable
+ * Destroy vartable
  */
-void uc_vartable_clear(void);
+void uc_vartable_destroy(struct uc_vartable** vartableloc);
 
 #endif

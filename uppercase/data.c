@@ -131,7 +131,11 @@ static void* uc_end_long_data(struct uc_datum_stack* dstack, struct uc_char_stac
 /**
  * The data state
  */
-void *uc_data_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_data_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -162,7 +166,11 @@ void *uc_data_state(struct uc_program* program, struct uc_datum_stack* dstack, s
  *
  * Handles string data types
  */
-void *uc_string_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_string_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -184,7 +192,11 @@ void *uc_string_state(struct uc_program* program, struct uc_datum_stack* dstack,
  *
  * Handles letters in strings
  */
-void *uc_string_letter_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_string_letter_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -202,7 +214,11 @@ void *uc_string_letter_state(struct uc_program* program, struct uc_datum_stack* 
  *
  * Handles uppercase letters in strings
  */
-void *uc_string_uppercase_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_string_uppercase_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character(cstack, program, uc_uppercase(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
@@ -212,7 +228,11 @@ void *uc_string_uppercase_state(struct uc_program* program, struct uc_datum_stac
  *
  * Handles lowercase letters in strings
  */
-void *uc_string_lowercase_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_string_lowercase_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character(cstack, program, uc_lowercase(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
@@ -222,7 +242,11 @@ void *uc_string_lowercase_state(struct uc_program* program, struct uc_datum_stac
  *
  * Handles whitespace characters in strings
  */
-void *uc_string_whitespace_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_string_whitespace_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character(cstack, program, uc_whitespace(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
@@ -232,7 +256,11 @@ void *uc_string_whitespace_state(struct uc_program* program, struct uc_datum_sta
  *
  * Handles punctuation in strings
  */
-void *uc_string_punctuation_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_string_punctuation_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character(cstack, program, uc_punctuation(program), (void*)&uc_string_state, "main -> data -> string -> string_punctuation");
 }
@@ -244,7 +272,11 @@ void *uc_string_punctuation_state(struct uc_program* program, struct uc_datum_st
  * 
  * Handles string data types
  */
-void *uc_character_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_character_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -264,7 +296,11 @@ void *uc_character_state(struct uc_program* program, struct uc_datum_stack* dsta
  *
  * Handles letters
  */
-void *uc_character_letter_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_character_letter_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -282,7 +318,11 @@ void *uc_character_letter_state(struct uc_program* program, struct uc_datum_stac
  *
  * Handles uppercase letters
  */
-void *uc_character_uppercase_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_character_uppercase_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character_data(dstack, program, uc_uppercase(program), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_uppercase");
 }
@@ -292,7 +332,11 @@ void *uc_character_uppercase_state(struct uc_program* program, struct uc_datum_s
  *
  * Handles lowercase letters
  */
-void *uc_character_lowercase_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_character_lowercase_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character_data(dstack, program, uc_lowercase(program), (void*)&uc_main_state, "main -> data -> character -> character_letter -> character_lowercase");
 }
@@ -302,7 +346,11 @@ void *uc_character_lowercase_state(struct uc_program* program, struct uc_datum_s
  *
  * Handles whitespace characters
  */
-void *uc_character_whitespace_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_character_whitespace_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character_data(dstack, program, uc_whitespace(program), (void*)&uc_main_state, "main -> data -> character -> character_whitespace");
 }
@@ -312,7 +360,11 @@ void *uc_character_whitespace_state(struct uc_program* program, struct uc_datum_
  *
  * Handles punctuation
  */
-void *uc_character_punctuation_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_character_punctuation_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	return uc_add_character_data(dstack, program, uc_punctuation(program), (void*)&uc_main_state, "main -> data -> character -> character_punctuation");
 }
@@ -326,7 +378,11 @@ void *uc_character_punctuation_state(struct uc_program* program, struct uc_datum
  *
  * Handles booleans
  */
-void *uc_boolean_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_boolean_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	switch(uc_program_current_character(program))
 	{
@@ -346,7 +402,11 @@ void *uc_boolean_state(struct uc_program* program, struct uc_datum_stack* dstack
  *
  * Handles integers
  */
-void *uc_integer_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_integer_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	if (uc_program_current_character(program) == 'E')
 	{
@@ -363,7 +423,11 @@ void *uc_integer_state(struct uc_program* program, struct uc_datum_stack* dstack
  *
  * Handles floats
  */
-void *uc_float_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack)
+void *uc_float_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable)
 {
 	if (uc_program_current_character(program) == 'E')
 	{

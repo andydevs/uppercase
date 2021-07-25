@@ -25,6 +25,7 @@
 #include "program.h"
 #include "datum_stack.h"
 #include "char_stack.h"
+#include "vartable.h"
 
 //----------------------------MATH STATE----------------------------
 
@@ -33,6 +34,10 @@
  *
  * Handles math operations
  */
-void *uc_math_state(struct uc_program* program, struct uc_datum_stack* dstack, struct uc_char_stack* cstack);
+void *uc_math_state(
+	struct uc_program* program,
+	struct uc_datum_stack* dstack,
+	struct uc_char_stack* cstack,
+	struct uc_vartable* vtable);
 
 #endif
